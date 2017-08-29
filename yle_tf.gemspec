@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.executables   = ['tf']
   spec.require_paths = ['lib']
 
+  spec.required_ruby_version = '>= 2.2'
+
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'rspec', '~> 3.5'
