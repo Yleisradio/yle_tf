@@ -1,0 +1,4 @@
+backend:
+  type: file
+terraform:
+  version_requirement: "~> 0.9.11"
