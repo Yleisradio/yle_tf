@@ -23,9 +23,9 @@ Gem::Specification.new do |spec|
     'antti.forsell@iki.fi',
   ]
 
-  spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files = Dir['bin/**/*'] +
+               Dir['lib/**/*.rb'] +
+               Dir['vendor/**/*']
 
   spec.bindir        = 'bin'
   spec.executables   = ['tf']
