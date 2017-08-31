@@ -19,10 +19,10 @@ class YleTf
       end
 
       def self.load_bundler_plugins
-        if defined?(Bundler)
-          print_bundler_plugin_list if Logger.debug?
-          Bundler.require(BUNDLER_PLUGIN_GROUP)
-        end
+        return if !bundler_set_up?
+
+        Logger.debug { print_bundler_plugin_list }
+        Bundler.require(BUNDLER_PLUGIN_GROUP)
       end
 
       def self.load_user_plugins
@@ -45,6 +45,10 @@ class YleTf
 
       def self.user_plugins
         ENV.fetch('TF_PLUGINS', '').split(/[ ,]+/)
+      end
+
+      def self.bundler_set_up?
+        defined?(Bundler) && Bundler.respond_to?(:require)
       end
 
       def self.print_bundler_plugin_list

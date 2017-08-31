@@ -1,5 +1,6 @@
 Metrics/BlockLength:
   Exclude:
+    - '*.gemspec'
     - 'spec/**/*'
 
 Metrics/ClassLength:
