@@ -430,6 +430,10 @@ terraform:
   version_requirement: "~> 0.9.11"
 ```
 
+## Plugins
+
+Available plugins are listed on the [wiki page](https://github.com/Yleisradio/yle_tf/wiki#plugins)
+
 ## Development
 
 After checking out the repo, run `bundle update` to install and update the dependencies. Then, run `bundle exec rake spec` to run the tests.
