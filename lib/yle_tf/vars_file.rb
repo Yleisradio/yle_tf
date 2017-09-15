@@ -1,14 +1,16 @@
 class YleTf
   class VarsFile
+    ENV_DIR = 'envs'.freeze
+
     # Returns the env specific tfvars file path if it exists
     def self.find_env_vars_file(config)
-      path = "#{config.module_dir}/envs/#{config.tf_env}.tfvars"
+      path = "#{config.module_dir}/#{ENV_DIR}/#{config.tf_env}.tfvars"
       VarsFile.new(path) if File.exist?(path)
     end
 
     # Returns all envs that have tfvars files
     def self.list_all_envs(config)
-      Dir.glob("#{config.module_dir}/envs/*.tfvars").map do |path|
+      Dir.glob("#{config.module_dir}/#{ENV_DIR}/*.tfvars").map do |path|
         File.basename(path, '.tfvars')
       end
     end
