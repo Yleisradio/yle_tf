@@ -76,7 +76,7 @@ class YleTf
     end
 
     def delete_tmpdir
-      FileUtils.rm_r(@tmpdir) if @tmpdir
+      FileUtils.rm_r(@tmpdir) if @tmpdir && Dir.exist?(@tmpdir)
       @tmpdir = nil
     end
 
