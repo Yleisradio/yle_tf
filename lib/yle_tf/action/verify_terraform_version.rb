@@ -1,5 +1,6 @@
 require 'yle_tf/error'
 require 'yle_tf/logger'
+require 'yle_tf/system'
 require 'yle_tf/version_requirement'
 
 class YleTf
@@ -22,10 +23,8 @@ class YleTf
       end
 
       def terraform_version
-        # TODO: move `command` to YleTf::System
-        Regexp.last_match(1) if `terraform version` =~ /^Terraform v([^\s]+)/
-      rescue Errno::ENOENT
-        nil
+        v = YleTf::System.read_cmd('terraform', 'version', error_handler: proc {})
+        Regexp.last_match(1) if v =~ /^Terraform v([^\s]+)/
       end
 
       def verify_version(env)

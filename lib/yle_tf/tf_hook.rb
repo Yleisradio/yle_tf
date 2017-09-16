@@ -39,8 +39,8 @@ class YleTf
     def run(tf_vars)
       fetch if !path
 
-      Logger.info("Running hook '#{description}'...")
-      YleTf::System.cmd(path, env: vars.merge(tf_vars))
+      Logger.info("Running hook '#{description}'")
+      YleTf::System.cmd(path, env: vars.merge(tf_vars), progname: File.basename(path))
     ensure
       delete_tmpdir
     end
@@ -64,9 +64,9 @@ class YleTf
     end
 
     def clone_git_repo(config)
-      Logger.info("Cloning hook '#{description}' from #{config[:uri]} (#{config[:ref]})")
+      Logger.debug("Cloning hook '#{description}' from #{config[:uri]} (#{config[:ref]})")
       YleTf::System.cmd(
-        'git', 'clone', '--no-progress', '--depth=1', '--branch', config[:ref],
+        'git', 'clone', '--quiet', '--depth=1', '--branch', config[:ref],
         '--', config[:uri], config[:dir]
       )
     end

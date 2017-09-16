@@ -1,5 +1,6 @@
 require 'optparse'
 
+require 'yle_tf/system'
 require 'yle_tf/plugin'
 
 module YleTfPlugins
@@ -46,9 +47,14 @@ module YleTfPlugins
       end
 
       def terraform_help
-        `terraform help`.lines.grep(/^    /)
-      rescue Errno::ENOENT
-        '    [Terraform not found]'
+        on_error = proc do |exit_code|
+          # exit_code is nil if the command was not found
+          # Ignore other exit codes, as older Terraform versions return
+          # non-zero exit codes for the help.
+          return '    [Terraform not found]' if exit_code.nil?
+        end
+        help = YleTf::System.read_cmd('terraform', '--help', error_handler: on_error)
+        help.lines.grep(/^    /)
       end
     end
   end
