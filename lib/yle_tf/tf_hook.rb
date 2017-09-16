@@ -4,6 +4,7 @@ require 'tmpdir'
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/system'
+require 'yle_tf/system/tf_hook_output_logger'
 
 class YleTf
   class TfHook
@@ -40,7 +41,13 @@ class YleTf
       fetch if !path
 
       Logger.info("Running hook '#{description}'")
-      YleTf::System.cmd(path, env: vars.merge(tf_vars), progname: File.basename(path))
+      YleTf::System.cmd(
+        path,
+        env: vars.merge(tf_vars),
+        progname: File.basename(path),
+        stdout: System::TfHookOutputLogger.new(:info),
+        stderr: System::TfHookOutputLogger.new(:error)
+      )
     ensure
       delete_tmpdir
     end
