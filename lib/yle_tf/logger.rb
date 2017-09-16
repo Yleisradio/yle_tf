@@ -1,6 +1,7 @@
 require 'forwardable'
 require 'logger'
 require 'rubygems'
+require 'yle_tf/logger/colorize'
 
 class YleTf
   # Logger for debug, error, etc. outputs.
@@ -28,11 +29,32 @@ class YleTf
 
     def self.log_formatter
       proc do |severity, _datetime, progname, msg|
+        msg = Colorize.colorize(msg, color(severity))
+
         if progname
           "[#{progname}] #{severity}: #{msg}\n"
         else
           "#{severity}: #{msg}\n"
         end
+      end
+    end
+
+    def self.color?
+      @color
+    end
+
+    def self.color=(value)
+      @color = value
+    end
+
+    def self.color(severity)
+      return if !color?
+
+      case severity.to_s
+      when 'FATAL', 'ERROR'
+        :red
+      when 'WARN'
+        :brown
       end
     end
 

@@ -20,6 +20,7 @@ module YleTfPlugins
           o.on('-h', '--help', 'Prints this help')
           o.on('-v', '--version', 'Prints the version information')
           o.on('--debug', 'Print debug information')
+          o.on('--no-color', 'Do not output with colors')
           o.on('--no-hooks', 'Do not run any hooks')
           o.on('--only-hooks', 'Only run the hooks')
           o.separator ''
