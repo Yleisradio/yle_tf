@@ -5,7 +5,7 @@ class YleTf
     attr_reader :tf_options, :tf_command, :tf_command_args, :tf_env
 
     # YleTf option arguments
-    TF_OPTIONS = %w[--debug --no-hooks --only-hooks].freeze
+    TF_OPTIONS = %w[--debug --no-color --no-hooks --only-hooks].freeze
 
     HELP_ARGS = %w[-h --help help].freeze
     VERSION_ARGS = %w[-v --version version].freeze
@@ -65,7 +65,8 @@ class YleTf
         @tf_env = 'error'
       end
 
-      self.debug = true if @tf_options.include?(:debug)
+      self.debug = true if @tf_options[:debug]
+      YleTf::Logger.color = !@tf_options[:no_color]
     end
 
     # Returns `Symbol` for the arg, e.g. `"--foo-bar"` -> `:foo_bar`
