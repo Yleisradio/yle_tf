@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+require 'open3'
 require 'yle_tf/error'
 require 'yle_tf/tf_hook'
 
@@ -62,8 +63,9 @@ describe YleTf::TfHook do
 
     describe '#run' do
       before do
-        expect(YleTf::System).to receive(:system)
-          .with(expected_vars, expected_path) { return_value }
+        expect(Open3).to receive(:popen3)
+          .with(expected_vars, expected_path)
+          .and_yield(double, double, double, double(value: exit_status))
         allow(hook).to receive(:create_tmpdir) { tmpdir }
         expect(hook).to receive(:clone_git_repo)
 
@@ -72,13 +74,14 @@ describe YleTf::TfHook do
         allow($stderr).to receive(:write)
       end
 
+      let(:exit_status) { double(success?: exit_code.zero?, exitstatus: exit_code) }
       let(:tf_vars) { { 'FOO' => 'xxx', 'BAR' => 'yyy' } }
       let(:expected_vars) { tf_vars }
       let(:expected_path) { "#{tmpdir}/hook/path" }
       let(:tmpdir) { '/tmp/dir' }
 
       context 'when the hook suceeds' do
-        let(:return_value) { true }
+        let(:exit_code) { 0 }
 
         it { expect { hook.run(tf_vars) }.not_to raise_error }
 
@@ -102,12 +105,7 @@ describe YleTf::TfHook do
       end
 
       context 'when the hook returns non-zero exit status' do
-        let(:return_value) { false }
-        it { expect { hook.run(tf_vars) }.to raise_error(YleTf::System::ExecuteError) }
-      end
-
-      context 'when the hook execution fails' do
-        let(:return_value) { nil }
+        let(:exit_code) { 1 }
         it { expect { hook.run(tf_vars) }.to raise_error(YleTf::System::ExecuteError) }
       end
     end
@@ -133,9 +131,10 @@ describe YleTf::TfHook do
     end
 
     describe '#run' do
-      let(:tf_vars) { { 'FOO' => 'xxx', 'BAR' => 'yyy' } }
       before do
-        expect(YleTf::System).to receive(:system).with(tf_vars, path) { return_value }
+        expect(Open3).to receive(:popen3)
+          .with(tf_vars, path)
+          .and_yield(double, double, double, double(value: exit_status))
         expect(hook).not_to receive(:clone_git_repo)
 
         # silence the output
@@ -143,18 +142,16 @@ describe YleTf::TfHook do
         allow($stderr).to receive(:write)
       end
 
+      let(:exit_status) { double(success?: exit_code.zero?, exitstatus: exit_code) }
+      let(:tf_vars) { { 'FOO' => 'xxx', 'BAR' => 'yyy' } }
+
       context 'when the hook suceeds' do
-        let(:return_value) { true }
+        let(:exit_code) { 0 }
         it { expect { hook.run(tf_vars) }.not_to raise_error }
       end
 
       context 'when the hook returns non-zero exit status' do
-        let(:return_value) { false }
-        it { expect { hook.run(tf_vars) }.to raise_error(YleTf::Error) }
-      end
-
-      context 'when the hook execution fails' do
-        let(:return_value) { nil }
+        let(:exit_code) { 1 }
         it { expect { hook.run(tf_vars) }.to raise_error(YleTf::Error) }
       end
     end

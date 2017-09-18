@@ -1,5 +1,4 @@
-require 'optparse'
-
+require 'yle_tf/system'
 require 'yle_tf/version'
 
 module YleTfPlugins
@@ -11,9 +10,9 @@ module YleTfPlugins
       end
 
       def terraform_version
-        `terraform version`.lines.first
-      rescue Errno::ENOENT
-        '[Terraform not found]'
+        on_error = proc { return '[Terraform not found]' }
+        v = YleTf::System.read_cmd('terraform', 'version', error_handler: on_error)
+        v.lines.first
       end
     end
   end

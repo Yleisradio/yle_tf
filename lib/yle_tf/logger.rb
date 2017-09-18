@@ -7,9 +7,11 @@ class YleTf
   # Logger for debug, error, etc. outputs.
   # Prints to STDERR, so it does not mess with e.g. `terraform output`.
   module Logger
+    LEVELS = %i[debug info warn error fatal].freeze
+
     class << self
       extend Forwardable
-      def_delegators :logger, :debug, :info, :warn, :error, :fatal
+      def_delegators :logger, *LEVELS
       def_delegators :logger, :debug?
     end
 
@@ -32,7 +34,7 @@ class YleTf
         msg = Colorize.colorize(msg, color(severity))
 
         if progname
-          "[#{progname}] #{severity}: #{msg}\n"
+          "#{severity}: [#{progname}] #{msg}\n"
         else
           "#{severity}: #{msg}\n"
         end

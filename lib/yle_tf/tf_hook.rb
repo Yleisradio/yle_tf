@@ -4,6 +4,7 @@ require 'tmpdir'
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/system'
+require 'yle_tf/system/tf_hook_output_logger'
 
 class YleTf
   class TfHook
@@ -39,8 +40,14 @@ class YleTf
     def run(tf_vars)
       fetch if !path
 
-      Logger.info("Running hook '#{description}'...")
-      YleTf::System.cmd(path, env: vars.merge(tf_vars))
+      Logger.info("Running hook '#{description}'")
+      YleTf::System.cmd(
+        path,
+        env: vars.merge(tf_vars),
+        progname: File.basename(path),
+        stdout: System::TfHookOutputLogger.new(:info),
+        stderr: System::TfHookOutputLogger.new(:error)
+      )
     ensure
       delete_tmpdir
     end
@@ -64,9 +71,9 @@ class YleTf
     end
 
     def clone_git_repo(config)
-      Logger.info("Cloning hook '#{description}' from #{config[:uri]} (#{config[:ref]})")
+      Logger.debug("Cloning hook '#{description}' from #{config[:uri]} (#{config[:ref]})")
       YleTf::System.cmd(
-        'git', 'clone', '--no-progress', '--depth=1', '--branch', config[:ref],
+        'git', 'clone', '--quiet', '--depth=1', '--branch', config[:ref],
         '--', config[:uri], config[:dir]
       )
     end

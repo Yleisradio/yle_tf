@@ -15,8 +15,8 @@ class YleTf
         config = env[:config]
         backend = backend_config(config)
 
-        Logger.debug('Initializing Terraform with backend configuration:')
-        Logger.debug(backend.to_s)
+        Logger.info('Initializing Terraform')
+        Logger.debug("Backend configuration: #{backend}")
 
         if VersionRequirement.pre_0_9?(env[:terraform_version])
           init_pre_0_9(backend)
@@ -29,17 +29,21 @@ class YleTf
 
       def init_pre_0_9(backend)
         cli_args = backend.cli_args
-        YleTf::System.cmd('terraform', 'remote', 'config', *cli_args) if cli_args
+        if cli_args
+          YleTf::System.cmd('terraform', 'remote', 'config',
+                            '-no-color', *cli_args,
+                            stdout: :debug)
+        end
 
         Logger.debug('Fetching Terraform modules')
-        YleTf::System.cmd('terraform', 'get')
+        YleTf::System.cmd('terraform', 'get', '-no-color', stdout: :debug)
       end
 
       def init(backend)
         Logger.debug('Generating the backend configuration')
         backend.generate_config do
           Logger.debug('Initializing Terraform')
-          YleTf::System.cmd('terraform', 'init', '-no-color')
+          YleTf::System.cmd('terraform', 'init', '-no-color', stdout: :debug)
         end
       end
 
