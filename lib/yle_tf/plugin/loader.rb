@@ -21,7 +21,7 @@ class YleTf
       def self.load_bundler_plugins
         return if !bundler_set_up?
 
-        Logger.debug { print_bundler_plugin_list }
+        print_bundler_plugin_list if Logger.debug?
         Bundler.require(BUNDLER_PLUGIN_GROUP)
       end
 
