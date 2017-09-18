@@ -8,12 +8,9 @@ variable "env" {
   description = "The environment"
 }
 
-variable "aws_access_key" {
-  description = "Your AWS access key id"
-}
-
-variable "aws_secret_key" {
-  description = "Your AWS secret key"
+variable "ami" {
+  description = "The AMI to use"
+  default     = "ami-d7b9a2b1"
 }
 
 variable "instance_type" {

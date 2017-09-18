@@ -1,4 +1,4 @@
 backend:
   type: file
 terraform:
-  version_requirement: "~> 0.9.11"
+  version_requirement: "~> 0.10.5"

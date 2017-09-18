@@ -65,18 +65,20 @@ And here are the contents of the files:
 
 ```hcl
 provider "aws" {
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
-  region     = "${var.region}"
+  region = "${var.region}"
 }
 
 resource "aws_instance" "example" {
-  ami           = "ami-2757f631"
+  ami           = "${var.ami}"
   instance_type = "t2.micro"
+
+  tags {
+    Name = "example-#{var.env}"
+  }
 }
 ```
 
-_Please note that the AMI identifier changes based on your desired OS and region. For more information see [AWS documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)._
+_Please note that the AMI identifier changes based on your desired OS and region. For more information see [AWS documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html). You can also use the [aws_ami data source](https://www.terraform.io/docs/providers/aws/d/ami.html)._
 
 ##### variables.tf
 
@@ -91,12 +93,9 @@ variable "env" {
   description = "The environment"
 }
 
-variable "aws_access_key" {
-  description = "Your AWS access key id"
-}
-
-variable "aws_secret_key" {
-  description = "Your AWS secret key"
+variable "ami" {
+  description = "The AMI to use"
+  default     = "ami-d7b9a2b1"
 }
 
 variable "instance_type" {
@@ -105,12 +104,18 @@ variable "instance_type" {
 }
 ```
 
-##### envs/test.tfvars
+##### envs/prod.tfvars
+
+Let's use a bigger instance type in prod. So we override the default value with `envs/prod.tfvars`:
 
 ```ini
-aws_access_key = "TEST_ACCOUNT_ACCESS_KEY_HERE"
-aws_secret_key = "TEST_ACCOUNT_SECRET_KEY_HERE"
+instance_type = "t2.medium"
+
 ```
+
+##### envs/test.tfvars
+
+This file is empty, so it won't override any values set in `variables.tf`. The file must anyway exist to tell `tf` that this is a valid environment.
 
 ##### tf.yaml
 
@@ -118,7 +123,7 @@ aws_secret_key = "TEST_ACCOUNT_SECRET_KEY_HERE"
 backend:
   type: file
 terraform:
-  version_requirement: "~> 0.9.11"
+  version_requirement: "~> 0.10.5"
 ```
 
 #### Execution
@@ -130,67 +135,69 @@ First plan:
 ```
 $ tf test plan
 INFO: Symlinking state to '/usr/local/src/yle_tf/examples/examples_test.tfstate'
-
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your environment. If you forget, other
-commands will detect it and remind you to do so if necessary.
+INFO: Initializing Terraform
+INFO: Running `terraform plan`
 Refreshing Terraform state in-memory prior to plan...
 The refreshed state will be used to calculate this plan, but will not be
 persisted to local or remote state storage.
 
-The Terraform execution plan has been generated and is shown below.
-Resources are shown in alphabetical order for quick scanning. Green resources
-will be created (or destroyed and then created if an existing resource
-exists), yellow resources are being changed in-place, and red resources
-will be destroyed. Cyan entries are data sources to be read.
 
-Note: You didn't specify an "-out" parameter to save this plan, so when
-"apply" is called, Terraform can't guarantee this is what will execute.
+------------------------------------------------------------------------
 
-+ aws_instance.example
-    ami:                          "ami-d7b9a2b1"
-    associate_public_ip_address:  "<computed>"
-    availability_zone:            "<computed>"
-    ebs_block_device.#:           "<computed>"
-    ephemeral_block_device.#:     "<computed>"
-    instance_state:               "<computed>"
-    instance_type:                "t2.micro"
-    ipv6_address_count:           "<computed>"
-    ipv6_addresses.#:             "<computed>"
-    key_name:                     "<computed>"
-    network_interface.#:          "<computed>"
-    network_interface_id:         "<computed>"
-    placement_group:              "<computed>"
-    primary_network_interface_id: "<computed>"
-    private_dns:                  "<computed>"
-    private_ip:                   "<computed>"
-    public_dns:                   "<computed>"
-    public_ip:                    "<computed>"
-    root_block_device.#:          "<computed>"
-    security_groups.#:            "<computed>"
-    source_dest_check:            "true"
-    subnet_id:                    "<computed>"
-    tenancy:                      "<computed>"
-    volume_tags.%:                "<computed>"
-    vpc_security_group_ids.#:     "<computed>"
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  + aws_instance.example
+      id:                           <computed>
+      ami:                          "ami-d7b9a2b1"
+      associate_public_ip_address:  <computed>
+      availability_zone:            <computed>
+      ebs_block_device.#:           <computed>
+      ephemeral_block_device.#:     <computed>
+      instance_state:               <computed>
+      instance_type:                "t2.micro"
+      ipv6_address_count:           <computed>
+      ipv6_addresses.#:             <computed>
+      key_name:                     <computed>
+      network_interface.#:          <computed>
+      network_interface_id:         <computed>
+      placement_group:              <computed>
+      primary_network_interface_id: <computed>
+      private_dns:                  <computed>
+      private_ip:                   <computed>
+      public_dns:                   <computed>
+      public_ip:                    <computed>
+      root_block_device.#:          <computed>
+      security_groups.#:            <computed>
+      source_dest_check:            "true"
+      subnet_id:                    <computed>
+      tags.%:                       "1"
+      tags.Name:                    "example-#{var.env}"
+      tenancy:                      <computed>
+      volume_tags.%:                <computed>
+      vpc_security_group_ids.#:     <computed>
 
 
 Plan: 1 to add, 0 to change, 0 to destroy.
+
+------------------------------------------------------------------------
+
+Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+can't guarantee that exactly these actions will be performed if
+"terraform apply" is subsequently run.
+
 ```
 
 Then apply:
 
 ```
 $ tf test apply
-
-< SNIP >
-
+INFO: Symlinking state to '/usr/local/src/yle_tf/examples/examples_test.tfstate'
+INFO: Initializing Terraform
+INFO: Running `terraform apply`
 aws_instance.example: Creating...
   ami:                          "" => "ami-d7b9a2b1"
   associate_public_ip_address:  "" => "<computed>"
@@ -214,76 +221,74 @@ aws_instance.example: Creating...
   security_groups.#:            "" => "<computed>"
   source_dest_check:            "" => "true"
   subnet_id:                    "" => "<computed>"
+  tags.%:                       "" => "1"
+  tags.Name:                    "" => "example-#{var.env}"
   tenancy:                      "" => "<computed>"
   volume_tags.%:                "" => "<computed>"
   vpc_security_group_ids.#:     "" => "<computed>"
 aws_instance.example: Still creating... (10s elapsed)
 aws_instance.example: Still creating... (20s elapsed)
-aws_instance.example: Creation complete (ID: i-0f1327bbc53fd6bab)
+aws_instance.example: Creation complete after 22s (ID: i-0d3c42fbaba89b000)
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
-
-< SNIP >
 ```
 
 And when you're done using the infrastructure, destroy:
 
 ```
 $ tf test destroy
+INFO: Symlinking state to '/usr/local/src/yle_tf/examples/examples_test.tfstate'
+INFO: Initializing Terraform
+INFO: Running `terraform destroy`
+aws_instance.example: Refreshing state... (ID: i-0d3c42fbaba89b000)
 
-< SNIP >
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  - aws_instance.example
+
+
+Plan: 0 to add, 0 to change, 1 to destroy.
 
 Do you really want to destroy?
-  Terraform will delete all your managed infrastructure.
+  Terraform will destroy all your managed infrastructure, as shown above.
   There is no undo. Only 'yes' will be accepted to confirm.
 
   Enter a value: yes
 
-aws_instance.example: Refreshing state... (ID: i-0f1327bbc53fd6bab)
-aws_instance.example: Destroying... (ID: i-0f1327bbc53fd6bab)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 10s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 20s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 30s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 40s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 50s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 1m0s elapsed)
-aws_instance.example: Still destroying... (ID: i-0f1327bbc53fd6bab, 1m10s elapsed)
-aws_instance.example: Destruction complete
+aws_instance.example: Destroying... (ID: i-0d3c42fbaba89b000)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 10s elapsed)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 20s elapsed)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 30s elapsed)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 40s elapsed)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 50s elapsed)
+aws_instance.example: Still destroying... (ID: i-0d3c42fbaba89b000, 1m0s elapsed)
+aws_instance.example: Destruction complete after 1m1s
 
 Destroy complete! Resources: 1 destroyed.
 ```
 
-#### Production environment
+##### Production environment
 
-Now that we've tried that everything works in the test environment, let's do the same in production. Note that you can override variables if needed:
+Now that we've tried that everything works in the test environment, let's do the same in production.
 
-##### envs/prod.tfvars
-
-```ini
-aws_access_key = "PRODUCTION_ACCOUNT_ACCESS_KEY_HERE"
-aws_secret_key = "PRODUCTION_ACCOUNT_SECRET_KEY_HERE"
-
-# let's use a bigger instance type in prod
-instance_type = "t2.medium"
-```
-
-And run the commands just like with _test_:
+We'll run the commands just like with _test_:
 
 ```
 $ tf prod plan
-
 < SNIP >
 
 $ tf prod apply
-
 < SNIP >
 
 $ tf prod destroy
-
 < SNIP >
 ```
 
-_Note that the instance type is now t2.medium_
+_Note that the instance type is now t2.medium._
 
 ## Default components
 

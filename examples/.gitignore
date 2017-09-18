@@ -1,0 +1,3 @@
+# Ignore the state files in the example project.
+# In real life you might want to store the state somewhere.
+/examples_*.tfstate
