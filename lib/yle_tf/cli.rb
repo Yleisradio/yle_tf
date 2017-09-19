@@ -66,7 +66,7 @@ class YleTf
       end
 
       self.debug = true if @tf_options[:debug]
-      YleTf::Logger.color = !@tf_options[:no_color]
+      YleTf::Logger.color = false if @tf_options[:no_color]
     end
 
     # Returns `Symbol` for the arg, e.g. `"--foo-bar"` -> `:foo_bar`
