@@ -1,5 +1,7 @@
-## 0.2.1  / _Not released yet_
+## 0.2.1  / 2017-09-19
 
+- Default to colorful error messages only on a TTY ([GH-5](https://github.com/Yleisradio/yle_tf/pull/5))
+- Remove extraneous debug output when loading bundler plugins
 
 ## 0.2.0 / 2017-09-18
 
