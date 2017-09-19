@@ -8,6 +8,10 @@ class YleTf
   # Prints to STDERR, so it does not mess with e.g. `terraform output`.
   module Logger
     LEVELS = %i[debug info warn error fatal].freeze
+    DEVICE = STDERR
+
+    # Default to colorful error messages on a TTY
+    @color = DEVICE.respond_to?(:tty?) && DEVICE.tty?
 
     class << self
       extend Forwardable
@@ -16,7 +20,7 @@ class YleTf
     end
 
     def self.logger
-      @logger ||= ::Logger.new(STDERR).tap do |logger|
+      @logger ||= ::Logger.new(DEVICE).tap do |logger|
         patch_for_old_ruby(logger)
         logger.level = log_level
         logger.formatter = log_formatter
