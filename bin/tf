@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+# Catch Ctrl+C to avoid stack traces
+Signal.trap('INT') { abort }
+
 require 'bundler/setup' if File.exist?(File.expand_path('../../Gemfile', __FILE__))
 require 'yle_tf/cli'
 

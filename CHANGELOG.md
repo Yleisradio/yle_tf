@@ -1,5 +1,6 @@
 ## 0.2.2  / _Not released yet_
 
+- Catch `Ctrl+C` to avoid stack traces
 
 ## 0.2.1  / 2017-09-19
 
