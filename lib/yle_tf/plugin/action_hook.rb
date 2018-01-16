@@ -8,15 +8,11 @@ class YleTf
       end
 
       def before(existing, new, *args, &block)
-        if actions.include?(existing)
-          actions.insert_before(existing, new, *args, &block)
-        end
+        actions.insert_before(existing, new, *args, &block) if actions.include?(existing)
       end
 
       def after(existing, new, *args, &block)
-        if actions.include?(existing)
-          actions.insert_after(existing, new, *args, &block)
-        end
+        actions.insert_after(existing, new, *args, &block) if actions.include?(existing)
       end
     end
   end

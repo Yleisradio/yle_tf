@@ -78,13 +78,7 @@ class YleTf
       def self.io_input(source)
         lambda do |target, *|
           Thread.new do
-            begin
-              while (data = source.readpartial(BLOCK_SIZE))
-                target.write(data)
-              end
-            ensure
-              target.close_write
-            end
+            copy_data(source, target, close_target: true)
           end
         end
       end
@@ -94,11 +88,20 @@ class YleTf
       def self.io_output(target)
         lambda do |source, *|
           Thread.new do
-            while (data = source.readpartial(BLOCK_SIZE))
-              target.write(data)
-            end
+            copy_data(source, target)
           end
         end
+      end
+
+      # Reads all data from the source IO and writes it to the target IO
+      def self.copy_data(source, target, **opts)
+        while (data = source.readpartial(BLOCK_SIZE))
+          target.write(data)
+        end
+      rescue EOFError # rubocop:disable Lint/HandleExceptions
+        # All read
+      ensure
+        target.close_write if opts[:close_target]
       end
     end
   end

@@ -5,6 +5,8 @@ require 'yle_tf/error'
 require 'yle_tf/tf_hook'
 
 describe YleTf::TfHook do
+  let(:dummy_io) { double.as_null_object }
+
   describe '.from_config' do
     subject(:hook) { described_class.from_config(conf, env) }
     let(:conf) do
@@ -65,7 +67,7 @@ describe YleTf::TfHook do
       before do
         expect(Open3).to receive(:popen3)
           .with(expected_vars, expected_path)
-          .and_yield(double, double, double, double(value: exit_status))
+          .and_yield(dummy_io, dummy_io, dummy_io, double(value: exit_status))
         allow(hook).to receive(:create_tmpdir) { tmpdir }
         expect(hook).to receive(:clone_git_repo)
 
@@ -134,7 +136,7 @@ describe YleTf::TfHook do
       before do
         expect(Open3).to receive(:popen3)
           .with(tf_vars, path)
-          .and_yield(double, double, double, double(value: exit_status))
+          .and_yield(dummy_io, dummy_io, dummy_io, double(value: exit_status))
         expect(hook).not_to receive(:clone_git_repo)
 
         # silence the output

@@ -32,6 +32,7 @@ module YleTfPlugins
           o.separator terraform_help
         end
       end
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       def error?(env)
         env[:tf_env] == 'error'
