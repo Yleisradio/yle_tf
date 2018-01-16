@@ -7,6 +7,11 @@ require 'yle_tf/version_requirement'
 class YleTf
   module Action
     class TerraformInit
+      TF_CMD_OPTS = {
+        env: { 'TF_IN_AUTOMATION' => 'true' }, # Reduces some output
+        stdout: :debug                         # Hide the output to the debug level
+      }.freeze
+
       def initialize(app)
         @app = app
       end
@@ -30,20 +35,18 @@ class YleTf
       def init_pre_0_9(backend)
         cli_args = backend.cli_args
         if cli_args
-          YleTf::System.cmd('terraform', 'remote', 'config',
-                            '-no-color', *cli_args,
-                            stdout: :debug)
+          YleTf::System.cmd('terraform', 'remote', 'config', '-no-color', *cli_args, TF_CMD_OPTS)
         end
 
         Logger.debug('Fetching Terraform modules')
-        YleTf::System.cmd('terraform', 'get', '-no-color', stdout: :debug)
+        YleTf::System.cmd('terraform', 'get', '-no-color', TF_CMD_OPTS)
       end
 
       def init(backend)
         Logger.debug('Generating the backend configuration')
         backend.generate_config do
           Logger.debug('Initializing Terraform')
-          YleTf::System.cmd('terraform', 'init', '-no-color', stdout: :debug)
+          YleTf::System.cmd('terraform', 'init', '-no-color', TF_CMD_OPTS)
         end
       end
 
