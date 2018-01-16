@@ -12,9 +12,7 @@ class YleTf
         config = env[:config]
         all_envs = VarsFile.list_all_envs(config)
 
-        if all_envs.empty?
-          raise Error, "No Terraform vars files found in '#{VarsFile::ENV_DIR}/'"
-        end
+        raise(Error, "No Terraform vars files found in '#{VarsFile::ENV_DIR}/'") if all_envs.empty?
 
         if !all_envs.include?(config.tf_env)
           raise Error, "Terraform vars file not found for the '#{config.tf_env}' " \

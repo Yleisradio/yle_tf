@@ -68,6 +68,8 @@ class YleTf
       self.debug = true if @tf_options[:debug]
       YleTf::Logger.color = false if @tf_options[:no_color]
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/BlockLength, Metrics/MethodLength
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
     # Returns `Symbol` for the arg, e.g. `"--foo-bar"` -> `:foo_bar`
     def key(arg)
