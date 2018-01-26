@@ -1,3 +1,6 @@
+## 0.3.1  / _Not released yet_
+
+
 ## 0.3.0  / 2018-01-26
 
 - Catch `Ctrl+C` to avoid stack traces
