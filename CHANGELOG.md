@@ -6,7 +6,7 @@
 - Catch `Ctrl+C` to avoid stack traces
 - Fix Ruby 2.5 warnings from IO handler threads ([GH-6](https://github.com/Yleisradio/yle_tf/pull/6))
 - Reduce debug level help output of the Terraform initialization ([GH-7](https://github.com/Yleisradio/yle_tf/pull/7))
-- Deny interaction when initializing Terraform ([GH-9](https://github.com/Yleisradio/yle_tf/pull/9)
+- Deny interaction when initializing Terraform ([GH-9](https://github.com/Yleisradio/yle_tf/pull/9))
 
 ## 0.2.1  / 2017-09-19
 
