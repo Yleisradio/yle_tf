@@ -13,7 +13,11 @@ class YleTf
 
       def call(io, progname)
         Thread.new do
-          io.each { |line| log(progname, line.chomp) }
+          begin
+            io.each { |line| log(progname, line.chomp) }
+          rescue IOError => e
+            YleTf::Logger.debug e.full_message
+          end
         end
       end
 

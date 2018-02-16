@@ -1,3 +1,5 @@
+require 'yle_tf/error'
+require 'yle_tf/logger'
 require 'yle_tf/system/output_logger'
 
 class YleTf
@@ -69,7 +71,11 @@ class YleTf
       def self.dev_null_output
         lambda do |io, *|
           Thread.new do
-            while io.read; end
+            begin
+              while io.read; end
+            rescue IOError => e
+              YleTf::Logger.debug e.full_message
+            end
           end
         end
       end
@@ -100,6 +106,8 @@ class YleTf
         end
       rescue EOFError # rubocop:disable Lint/HandleExceptions
         # All read
+      rescue IOError => e
+        YleTf::Logger.debug e.full_message
       ensure
         target.close_write if opts[:close_target]
       end
