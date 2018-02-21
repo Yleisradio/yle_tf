@@ -8,14 +8,16 @@ class YleTf
     autoload :TerraformInit, 'yle_tf/action/terraform_init'
     autoload :TfHooks, 'yle_tf/action/tf_hooks'
     autoload :TmpDir, 'yle_tf/action/tmpdir'
-    autoload :VerifyTfEnv, 'yle_tf/action/verify_tf_env'
     autoload :VerifyTerraformVersion, 'yle_tf/action/verify_terraform_version'
+    autoload :VerifyTfEnv, 'yle_tf/action/verify_tf_env'
+    autoload :WriteTerraformrcDefaults, 'yle_tf/action/write_terraformrc_defaults'
 
     def self.default_action_stack(command_class = nil)
       Builder.new do
         use LoadConfig
         use VerifyTfEnv
         use TmpDir
+        use WriteTerraformrcDefaults
         use VerifyTerraformVersion
         use CopyRootModule
         use GenerateVarsFile
