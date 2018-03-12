@@ -10,6 +10,7 @@ module YleTfPlugins
 
         YleTf::Action::Builder.new do
           use YleTf::Action::TmpDir
+          use YleTf::Action::WriteTerraformrcDefaults
           use YleTf::Action::Command, Command
         end
       end
