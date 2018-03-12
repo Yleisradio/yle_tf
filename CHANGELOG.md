@@ -1,5 +1,7 @@
-## 0.3.1  / _Not released yet_
+## 0.4.0  / 2018-03-12
 
+- Write default Terraform CLI configuration ([GH-10](https://github.com/Yleisradio/yle_tf/pull/10))
+- Handle IOErrors in IO Handlers ([GH-11](https://github.com/Yleisradio/yle_tf/pull/11))
 
 ## 0.3.0  / 2018-01-26
 
