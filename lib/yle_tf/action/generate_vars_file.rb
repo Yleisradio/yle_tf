@@ -20,7 +20,7 @@ class YleTf
       end
 
       def tfvars(env)
-        env[:tfvars].merge(env[:config].fetch('tfvars'))
+        env[:tfvars].merge(env[:config].fetch('tfvars').select { |key, value| value.to_s.length() != 0 })
       end
     end
   end
