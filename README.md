@@ -425,6 +425,8 @@ backend:
   type: s3
 ```
 
+Currently local file, S3, and Swift are supported.
+
 #### Terraform
 
 * `version_requirement` - The version requirement of Terraform in ruby gem syntax.
