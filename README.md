@@ -73,7 +73,7 @@ resource "aws_instance" "example" {
   instance_type = "t2.micro"
 
   tags {
-    Name = "example-#{var.env}"
+    Name = "example-${var.env}"
   }
 }
 ```
@@ -110,7 +110,6 @@ Let's use a bigger instance type in prod. So we override the default value with 
 
 ```ini
 instance_type = "t2.medium"
-
 ```
 
 ##### envs/test.tfvars
@@ -175,7 +174,7 @@ Terraform will perform the following actions:
       source_dest_check:            "true"
       subnet_id:                    <computed>
       tags.%:                       "1"
-      tags.Name:                    "example-#{var.env}"
+      tags.Name:                    "example-test"
       tenancy:                      <computed>
       volume_tags.%:                <computed>
       vpc_security_group_ids.#:     <computed>
@@ -222,7 +221,7 @@ aws_instance.example: Creating...
   source_dest_check:            "" => "true"
   subnet_id:                    "" => "<computed>"
   tags.%:                       "" => "1"
-  tags.Name:                    "" => "example-#{var.env}"
+  tags.Name:                    "" => "example-test"
   tenancy:                      "" => "<computed>"
   volume_tags.%:                "" => "<computed>"
   vpc_security_group_ids.#:     "" => "<computed>"
@@ -294,35 +293,35 @@ _Note that the instance type is now t2.medium._
 
 ### tf.yaml
 
-Here be dragons that configure your project. The tools serches for `tf.yaml`'s up your path all the way to root `/`. Configs made in subdirectories override those made upper in the path. This makes it easy to define common settings without having to edit `tf.yaml` in every project.
+Here be dragons that configure your project. The tools searches for `tf.yaml`'s up your path all the way to root `/`. Configs made in subdirectories override those made upper in the path. This makes it easy to define common settings without having to edit `tf.yaml` in every project.
 
-By defalt the following configuration options are supported:
+By default the following configuration options are supported:
 * [`hooks`](#hooks) - Pre and Post hooks.
 * [`backend`](#backend) - Configuration of remote state location.
 * [`terraform`](#terraform) - Terraform specific configuration.
 
 #### Hooks
 
-There are cases when it would be beneficial to run a task at the same time as terrafrom, but building native support for that would be quite cumbersome. The support for hooks was build into YleTf having those cases in mind.
+There are cases when it would be beneficial to run a task at the same time as Terrafrom, but building native support for that would be quite cumbersome. The support for hooks was build into YleTf having those cases in mind.
 
 Essentially hooks are just scripts and small applications to extend the functionality of Terraform. Hooks can be either
 * [local](#local-hooks) or
 * [remote](#remote-hooks) i.e. stored into git.
 
-Real world usecases for hooks include at least the following:
+Real world use cases for hooks include at least the following:
 * Automatically register ACM certificates and link them to desired resources
-* Automatically generate dns record resources that are managed by separate configuration
+* Automatically generate DNS record resources that are managed by separate configuration
 * Package lambda applications for deployment via Terraform
 * Manage SES authorisations and rules
 * Modify parameters not yet supported by Terraform
 
 Currently two kinds of hooks are supported:
-* `pre` - Hooks that run before terraform execution.
-* `post` - Hooks that run after terraform execution.
+* `pre` - Hooks that run before Terraform execution.
+* `post` - Hooks that run after Terraform execution.
 
 #### Local hooks
 
-For local hooks, add a directory called `tf_hooks` to your tf project root. You also need a folder to determine wether the hook is run before or after the execution of terraform. The folders are `pre` and/or `post`:
+For local hooks, add a directory called `tf_hooks` to your tf project root. You also need a folder to determine wether the hook is run before or after the execution of Terraform. The folders are `pre` and/or `post`:
 
 ```
 .
@@ -372,7 +371,7 @@ case "$TF_COMMAND" in
 esac
 ```
 
-_Please note that the script in the [examples](examples/) directory is intentionnally without the execute bit._
+_Please note that the script in the [examples](examples/) directory is intentionally without the execute bit._
 
 Once you set the hook script executable (`chmod +x tf_hooks/pre/get_current_hash.sh`) and run `tf` with either `plan` or `apply`, you'll have the following file during runtime:
 
@@ -388,7 +387,7 @@ Once you set the hook script executable (`chmod +x tf_hooks/pre/get_current_hash
 }
 ```
 
-_Naturraly the actual value varies according to your repository._
+_Naturally the actual value varies according to your repository._
 
 _**Please note that files generated into the temporary working directory while running hooks are removed once the execution has ended.**_
 
