@@ -3,7 +3,7 @@
 # Catch Ctrl+C to avoid stack traces
 Signal.trap('INT') { abort }
 
-require 'bundler/setup' if File.exist?(File.expand_path('../../Gemfile', __FILE__))
+require 'bundler/setup' if File.exist?(File.expand_path('../Gemfile', __dir__))
 require 'yle_tf/cli'
 
 cli = YleTf::CLI.new(ARGV)

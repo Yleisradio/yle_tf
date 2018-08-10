@@ -33,7 +33,7 @@ class YleTf
       end
 
       def self.core_plugins
-        Dir.glob(File.expand_path('../../../yle_tf_plugins/**/plugin.rb', __FILE__))
+        Dir.glob(File.expand_path('../../yle_tf_plugins/**/plugin.rb', __dir__))
       end
 
       def self.bundler_plugins
