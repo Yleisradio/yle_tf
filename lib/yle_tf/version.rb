@@ -1,3 +1,3 @@
 class YleTf
-  VERSION = '0.4.1.dev'.freeze
+  VERSION = '1.0.0'.freeze
 end

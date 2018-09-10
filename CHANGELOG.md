@@ -1,5 +1,10 @@
-## 0.4.1  / _Not released yet_
+## 1.0.0  / 2018-09-10
 
+Seems that the project is stable enough for v1.0! \o/
+
+Only change after 0.4.0 is:
+
+- Add support for OpenStack Swift backend ([GH-13](https://github.com/Yleisradio/yle_tf/pull/13))
 
 ## 0.4.0  / 2018-03-12
 
