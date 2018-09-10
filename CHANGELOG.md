@@ -1,3 +1,6 @@
+## 1.0.1 / _Not released yet_
+
+
 ## 1.0.0  / 2018-09-10
 
 Seems that the project is stable enough for v1.0! \o/
