@@ -10,7 +10,7 @@ class YleTf
 
     # Returns all envs that have tfvars files
     def self.list_all_envs(config)
-      Dir.glob("#{config.module_dir}/#{ENV_DIR}/*.tfvars").map do |path|
+      Dir.glob("#{config.module_dir}/#{ENV_DIR}/*.tfvars").sort.map do |path|
         File.basename(path, '.tfvars')
       end
     end
