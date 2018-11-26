@@ -32,11 +32,17 @@ class YleTf
       end
     end
 
+    def eval_value(value)
+      return %("#{value}") if value.is_a?(String)
+
+      %({#{value.map { |k, v| %(#{k}="#{v}") }.join("\n")}})
+    end
+
     def append_vars(vars)
       File.open(path, 'a') do |file|
         file.puts # ensure we don't append to an existing line
         vars.each do |key, value|
-          file.puts %(#{key} = "#{value}")
+          file.puts %(#{key} = #{eval_value(value)})
         end
       end
     end
