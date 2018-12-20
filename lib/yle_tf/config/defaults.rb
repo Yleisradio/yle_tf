@@ -28,8 +28,9 @@ class YleTf
 
       def default_config_context
         {
-          env:    tf_env,
-          module: module_dir.basename.to_s,
+          env:        tf_env,
+          module:     module_dir.basename.to_s,
+          module_dir: module_dir.to_s,
         }
       end
     end
