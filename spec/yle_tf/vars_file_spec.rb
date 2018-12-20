@@ -42,6 +42,26 @@ describe YleTf::VarsFile do
     end
   end
 
+  describe '#append_file' do
+    subject { described_class.new(path) }
+
+    let(:path) { tempfile.path }
+    let(:tempfile) do
+      Tempfile.new(['yle_tf', '.tfvars']).tap do |f|
+        f.close
+        FileUtils.cp(original_tfvars, f.path)
+      end
+    end
+    let(:original_tfvars) { 'spec/fixtures/vars_files/envs/dau.tfvars' }
+    let(:append_tfvars) { 'spec/fixtures/vars_files/envs/diu.tfvars' }
+    let(:final_tfvars) { 'spec/fixtures/vars_files/append_file.final.tfvars' }
+
+    it do
+      subject.append_file(described_class.new(append_tfvars))
+      expect(subject.read).to eq(IO.read(final_tfvars))
+    end
+  end
+
   describe '#append_vars' do
     subject { described_class.new(path) }
 
