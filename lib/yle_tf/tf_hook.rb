@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'tmpdir'
 
@@ -14,8 +16,8 @@ class YleTf
     def self.from_config(config, tf_env)
       TfHook.new(
         description: config['description'],
-        source: config['source'],
-        vars: merge_vars(config['vars'], tf_env)
+        source:      config['source'],
+        vars:        merge_vars(config['vars'], tf_env)
       )
     end
 
@@ -23,7 +25,7 @@ class YleTf
     def self.from_file(path)
       TfHook.new(
         description: File.basename(path),
-        path: path
+        path:        path
       )
     end
 
@@ -43,10 +45,10 @@ class YleTf
       Logger.info("Running hook '#{description}'")
       YleTf::System.cmd(
         path,
-        env: vars.merge(tf_vars),
+        env:      vars.merge(tf_vars),
         progname: File.basename(path),
-        stdout: System::TfHookOutputLogger.new(:info),
-        stderr: System::TfHookOutputLogger.new(:error)
+        stdout:   System::TfHookOutputLogger.new(:info),
+        stderr:   System::TfHookOutputLogger.new(:error)
       )
     ensure
       delete_tmpdir
@@ -57,9 +59,9 @@ class YleTf
       raise Error, "Invalid or missing `source` for hook '#{description}'" if !m
 
       {
-        uri: m[:uri],
+        uri:  m[:uri],
         path: m[:path],
-        ref: m[:ref] || 'master'
+        ref:  m[:ref] || 'master'
       }
     end
 

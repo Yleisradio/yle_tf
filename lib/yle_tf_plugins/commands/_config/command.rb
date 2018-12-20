@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/logger'
 
 module YleTfPlugins

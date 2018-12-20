@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'json'
 
 class YleTf
   class BackendConfig
-    BACKEND_CONFIG_FILE = '_backend.tf.json'.freeze
+    BACKEND_CONFIG_FILE = '_backend.tf.json'
 
     attr_reader :type, :config
 

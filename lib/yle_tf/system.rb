@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'English'
 require 'open3'
 require 'shellwords'
@@ -14,7 +16,7 @@ class YleTf
     DEFAULT_ERROR_HANDLER = ->(_exit_code, error) { raise error }.freeze
 
     DEFAULT_IO_HANDLERS = {
-      stdin: :dev_null,
+      stdin:  :dev_null,
       stdout: :info,
       stderr: :error
     }.freeze

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class YleTf
   class VarsFile
-    ENV_DIR = 'envs'.freeze
+    ENV_DIR = 'envs'
 
     # Returns the env specific tfvars file path if it exists
     def self.find_env_vars_file(config)

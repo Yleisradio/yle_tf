@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 require 'open3'
@@ -12,8 +14,8 @@ describe YleTf::TfHook do
     let(:conf) do
       {
         'description' => description,
-        'source' => source,
-        'vars' => vars
+        'source'      => source,
+        'vars'        => vars
       }
     end
     let(:description) { 'Hook description' }
@@ -53,8 +55,8 @@ describe YleTf::TfHook do
         let(:vars) do
           {
             'defaults' => { 'FOO' => 'bar', 'MEMORY' => '5TB' },
-            env => { 'DIU' => 'dau', 'MEMORY' => '2TB' },
-            'dummy' => { 'FOO' => 'baz' }
+            env        => { 'DIU' => 'dau', 'MEMORY' => '2TB' },
+            'dummy'    => { 'FOO' => 'baz' }
           }
         end
         it 'returns the vars merged' do
@@ -91,7 +93,7 @@ describe YleTf::TfHook do
           let(:vars) do
             {
               'defaults' => { 'FOO' => 'bar', 'MEMORY' => '5TB' },
-              env => { 'DIU' => 'dau', 'MEMORY' => '2TB' }
+              env        => { 'DIU' => 'dau', 'MEMORY' => '2TB' }
             }
           end
           let(:expected_vars) do

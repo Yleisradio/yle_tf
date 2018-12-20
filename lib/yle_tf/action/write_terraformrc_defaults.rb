@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'yle_tf/logger'
 
@@ -5,10 +7,10 @@ class YleTf
   module Action
     class WriteTerraformrcDefaults
       # Path of the Terraform CLI configuration file
-      RC_PATH = '~/.terraformrc'.freeze
+      RC_PATH = '~/.terraformrc'
 
       # Path of the plugin cache directory
-      DEFAULT_PLUGIN_CACHE_PATH = '~/.terraform.d/plugin-cache'.freeze
+      DEFAULT_PLUGIN_CACHE_PATH = '~/.terraform.d/plugin-cache'
 
       def initialize(app)
         @app = app
