@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/backend_config'
 
 module YleTfPlugins
@@ -7,8 +9,8 @@ module YleTfPlugins
         def backend_config(config)
           YleTf::BackendConfig.new(
             'swift',
-            'region_name' => config.fetch('backend', 'region'),
-            'container' => config.fetch('backend', 'container'),
+            'region_name'       => config.fetch('backend', 'region'),
+            'container'         => config.fetch('backend', 'container'),
             'archive_container' => config.fetch('backend', 'archive_container') { nil }
           )
         end

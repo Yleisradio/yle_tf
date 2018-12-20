@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/system/output_logger'
@@ -22,6 +24,7 @@ class YleTf
           if !handler.respond_to?(:call)
             raise YleTf::Error, "Unknown input handler #{handler.inspect}"
           end
+
           handler
         end
       end
@@ -42,6 +45,7 @@ class YleTf
           if !handler.respond_to?(:call)
             raise YleTf::Error, "Unknown output handler #{handler.inspect}"
           end
+
           handler
         end
       end

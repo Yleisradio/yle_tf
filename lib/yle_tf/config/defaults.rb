@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 class YleTf
   class Config
     module Defaults
       DEFAULT_CONFIG = {
-        'hooks' => {
-          'pre' => [],
+        'hooks'     => {
+          'pre'  => [],
           'post' => []
         },
-        'backend' => {
-          'type' => 'file',
+        'backend'   => {
+          'type'    => 'file',
           'bucket'  => nil,
           'file'    => '<%= @module %>_<%= @env %>.tfstate',
           'region'  => nil,
           'encrypt' => false,
         },
-        'tfvars' => {
+        'tfvars'    => {
         },
         'terraform' => {
           'version_requirement' => nil
@@ -26,7 +28,7 @@ class YleTf
 
       def default_config_context
         {
-          env: tf_env,
+          env:    tf_env,
           module: module_dir.basename.to_s,
         }
       end

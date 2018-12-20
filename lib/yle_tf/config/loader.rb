@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/config/defaults'
 require 'yle_tf/config/erb'
 require 'yle_tf/config/file'
@@ -58,8 +60,7 @@ class YleTf
         Plugin.manager.default_configs.each do |plugin_config|
           deep_merge(
             config, plugin_config,
-            error_msg:
-              "Failed to merge a plugin's default configuration:\n" \
+            error_msg: "Failed to merge a plugin's default configuration:\n" \
               "#{plugin_config.inspect}\ninto:\n#{config.inspect}"
           )
         end
@@ -70,8 +71,7 @@ class YleTf
           Logger.debug("  - #{file}")
           deep_merge(
             config, file.read,
-            error_msg:
-              "Failed to merge configuration from '#{file}' into:\n" \
+            error_msg: "Failed to merge configuration from '#{file}' into:\n" \
               "#{config.inspect}"
           )
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'yaml'
 
@@ -34,6 +36,7 @@ class YleTf
 
       keys.inject(config) do |conf, key|
         break block.call(keys) if !conf || !conf.key?(key)
+
         conf[key]
       end
     end

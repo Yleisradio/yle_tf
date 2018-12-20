@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class YleTf
   class Plugin
     class ActionHook

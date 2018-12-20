@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class YleTf
   class Plugin
     autoload :ActionHook, 'yle_tf/plugin/action_hook'
@@ -30,7 +32,7 @@ class YleTf
       name = name.to_s if name.is_a?(Symbol)
       commands[name] = {
         synopsis: synopsis,
-        proc: block
+        proc:     block
       }
     end
 

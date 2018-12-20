@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/system'

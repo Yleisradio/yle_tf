@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/plugin'
@@ -10,8 +12,8 @@ class YleTf
       TF_CMD_ARGS = %w[-input=false -no-color].freeze
 
       TF_CMD_OPTS = {
-        env: { 'TF_IN_AUTOMATION' => 'true' }, # Reduces some output
-        stdout: :debug                         # Hide the output to the debug level
+        env:    { 'TF_IN_AUTOMATION' => 'true' }, # Reduces some output
+        stdout: :debug                            # Hide the output to the debug level
       }.freeze
 
       def initialize(app)

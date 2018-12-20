@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class YleTf
   module Action
     autoload :Builder, 'yle_tf/action/builder'
