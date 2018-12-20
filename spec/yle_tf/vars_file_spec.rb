@@ -2,7 +2,10 @@
 
 require 'spec_helper'
 
+require 'fileutils'
 require 'ostruct'
+require 'tempfile'
+require 'yaml'
 require 'yle_tf/vars_file'
 
 describe YleTf::VarsFile do
@@ -36,6 +39,26 @@ describe YleTf::VarsFile do
     context 'with non-existing var files' do
       let(:module_dir) { 'non_existing_dir' }
       it { is_expected.to eq([]) }
+    end
+  end
+
+  describe '#append_vars' do
+    subject { described_class.new(path) }
+
+    let(:path) { tempfile.path }
+    let(:tempfile) do
+      Tempfile.new(['yle_tf', '.tfvars']).tap do |f|
+        f.close
+        FileUtils.cp(original_tfvars, f.path)
+      end
+    end
+    let(:original_tfvars) { 'spec/fixtures/vars_files/envs/dau.tfvars' }
+    let(:appends_yaml) { 'spec/fixtures/vars_files/append_vars.append.yaml' }
+    let(:final_tfvars) { 'spec/fixtures/vars_files/append_vars.final.tfvars' }
+
+    it do
+      subject.append_vars(YAML.safe_load(IO.read(appends_yaml)))
+      expect(subject.read).to eq(IO.read(final_tfvars))
     end
   end
 end
