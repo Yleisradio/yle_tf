@@ -9,8 +9,8 @@ module YleTfPlugins
         register
 
         backend('file') do
-          require_relative 'command'
-          Command
+          require_relative 'backend'
+          Backend
         end
       end
     end

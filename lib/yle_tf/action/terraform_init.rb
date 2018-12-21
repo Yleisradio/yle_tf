@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/plugin'
 require 'yle_tf/system'
@@ -21,7 +20,7 @@ class YleTf
 
       def call(env)
         config = env[:config]
-        backend = backend_config(config)
+        backend = backend(config)
 
         Logger.info('Initializing Terraform')
         Logger.debug("Backend configuration: #{backend}")
@@ -33,25 +32,18 @@ class YleTf
 
       def init(backend)
         Logger.debug('Configuring the backend')
-        backend.generate_config
+        backend.configure
+
         Logger.debug('Initializing Terraform')
         YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, TF_CMD_OPTS)
       end
 
-      def backend_config(config)
+      def backend(config)
         backend_type = config.fetch('backend', 'type').downcase
-        backend_proc = backend_proc(backend_type)
+        backend_proc = Plugin.manager.backends[backend_type]
 
         klass = backend_proc.call
-        klass.new.backend_config(config)
-      end
-
-      def backend_proc(backend_type)
-        backends = Plugin.manager.backends
-        backends.fetch(backend_type.to_sym) do
-          raise Error, "Unknown backend type '#{backend_type}'. " \
-            "Supported backends: #{backends.keys.join(', ')}"
-        end
+        klass.new(config)
       end
     end
   end

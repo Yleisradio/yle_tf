@@ -3,10 +3,10 @@
 require 'yle_tf/config/defaults'
 require 'yle_tf/config/erb'
 require 'yle_tf/config/file'
+require 'yle_tf/config/migration'
+require 'yle_tf/helpers/hash'
 require 'yle_tf/logger'
 require 'yle_tf/plugin'
-
-require_relative '../../../vendor/hash_deep_merge'
 
 class YleTf
   class Config
@@ -21,20 +21,88 @@ class YleTf
       end
 
       def load
-        Logger.debug('Loading default config')
-        config = default_config
-        Logger.debug(config.inspect)
+        load_sequence = %i[
+          load_default_config
+          load_plugin_configurations
+          load_config_files
+          evaluate_configuration_strings
+        ]
+        load_sequence.inject({}) { |config, method| send(method, config) }
+      end
 
-        Logger.debug('Merging default configurations from plugins')
-        merge_plugin_configurations(config)
-        Logger.debug(config.inspect)
+      def load_default_config(_config)
+        task('Loading default config') { default_config }
+      end
 
-        Logger.debug('Merging configurations from files')
-        merge_config_files(config)
-        Logger.debug(config.inspect)
+      def load_plugin_configurations(config)
+        Logger.debug('Loading configuration from plugins')
 
-        Logger.debug('Evaluating the configuration strings')
-        eval_config(config)
+        plugins.inject(config) do |prev_config, plugin|
+          migrate_and_merge_configuration(prev_config, plugin.default_config,
+                                          type: 'plugin', name: plugin.to_s)
+        end
+      end
+
+      def load_config_files(config)
+        Logger.debug('Loading configuration from files')
+
+        config_files.inject(config) do |prev_config, file|
+          migrate_and_merge_configuration(prev_config, file.read,
+                                          type: 'file', name: file.name)
+        end
+      end
+
+      def evaluate_configuration_strings(config)
+        task('Evaluating the configuration strings') { eval_config(config) }
+      end
+
+      def eval_config(config)
+        case config
+        when Hash
+          config.each_with_object({}) { |(key, value), h| h[key] = eval_config(value) }
+        when Array
+          config.map { |item| eval_config(item) }
+        when String
+          Config::ERB.evaluate(config, config_context)
+        else
+          config
+        end
+      end
+
+      def plugins
+        Plugin.manager.registered
+      end
+
+      def config_files
+        module_dir.descend.lazy
+                  .map { |dir| dir.join('tf.yaml') }
+                  .select(&:exist?)
+                  .map { |file| Config::File.new(file) }
+      end
+
+      def migrate_and_merge_configuration(prev_config, config, **opts)
+        task("- #{opts[:name]}") { config }
+        return prev_config if config.empty?
+
+        source = "#{opts[:type]}: '#{opts[:name]}'"
+        config = migrate_old_config(config, source: source)
+        deep_merge(prev_config, config, source: source)
+      end
+
+      def migrate_old_config(config, **opts)
+        task('  -> Migrating') do
+          Config::Migration.migrate_old_config(config, opts)
+        end
+      end
+
+      def deep_merge(prev_config, config, **opts)
+        task('  -> Merging') do
+          Helpers::Hash.deep_merge(prev_config, config)
+        end
+      rescue StandardError => e
+        Logger.fatal("Failed to merge configuration from #{opts[:source]}:\n" \
+                     "#{config.inspect}\ninto:\n#{prev_config.inspect}")
+        raise e
       end
 
       def config_context
@@ -56,51 +124,13 @@ class YleTf
         end
       end
 
-      def merge_plugin_configurations(config)
-        Plugin.manager.default_configs.each do |plugin_config|
-          deep_merge(
-            config, plugin_config,
-            error_msg: "Failed to merge a plugin's default configuration:\n" \
-              "#{plugin_config.inspect}\ninto:\n#{config.inspect}"
-          )
-        end
-      end
+      # Helper to print debug information about the task and configuration
+      # after it
+      def task(message = nil)
+        Logger.debug(message) if message
 
-      def merge_config_files(config)
-        config_files do |file|
-          Logger.debug("  - #{file}")
-          deep_merge(
-            config, file.read,
-            error_msg: "Failed to merge configuration from '#{file}' into:\n" \
-              "#{config.inspect}"
-          )
-        end
-      end
-
-      def deep_merge(config, new_config, opts = {})
-        config.deep_merge!(new_config)
-      rescue StandardError => e
-        Logger.fatal(opts[:error_msg]) if opts[:error_msg]
-        raise e
-      end
-
-      def config_files
-        module_dir.descend do |dir|
-          file = dir.join('tf.yaml')
-          yield(Config::File.new(file)) if file.exist?
-        end
-      end
-
-      def eval_config(config)
-        case config
-        when Hash
-          config.each_with_object({}) { |(key, value), h| h[key] = eval_config(value) }
-        when Array
-          config.map { |item| eval_config(item) }
-        when String
-          Config::ERB.evaluate(config, config_context)
-        else
-          config
+        yield.tap do |config|
+          Logger.debug("  #{config.inspect}")
         end
       end
     end
