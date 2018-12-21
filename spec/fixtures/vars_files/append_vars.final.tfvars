@@ -1,0 +1,9 @@
+foo = "Bar"
+x   = 1
+
+mynumber = "14"
+mystring = "Hello, world!"
+mymap = { a = "99", b = "zip" }
+complex_map = { l1 = [ "10", "55", "2" ], l2 = [ "42", "3" ] }
+mylist = [ "aa", "ab", "ca" ]
+complex_list = [ { foo = "diu", bar = "dau" }, { foo = "zip", bar = "zap" } ]
