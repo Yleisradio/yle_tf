@@ -14,9 +14,9 @@ class YleTf
 
       def call(env)
         if env[:tf_options][:only_hooks]
-          Logger.debug "Skipping command #{command.class} due to `--only-hooks`"
+          Logger.debug "Skipping command #{command} due to `--only-hooks`"
         else
-          Logger.debug "Executing command #{command.class} with env: #{env.inspect}"
+          Logger.debug "Executing command #{command} with env: #{env.inspect}"
           command.new.execute(env)
         end
 
