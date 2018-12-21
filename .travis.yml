@@ -1,10 +1,6 @@
 language: ruby
 cache: bundler
 
-before_install:
-  # Workaround for https://github.com/travis-ci/travis-ci/issues/8969
-  - gem update --system
-
 rvm:
   - 2.5.3
   - 2.4.5
