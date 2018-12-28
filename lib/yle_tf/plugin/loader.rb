@@ -15,7 +15,7 @@ class YleTf
 
       def self.load_core_plugins
         core_plugins.each do |plugin_file|
-          Logger.debug("Loading core plugin: #{File.basename(plugin_file, '.rb')}")
+          Logger.debug { "Loading core plugin: #{core_plugin_name(plugin_file)}" }
           load(plugin_file)
         end
       end
@@ -36,6 +36,11 @@ class YleTf
 
       def self.core_plugins
         Dir.glob(File.expand_path('../../yle_tf_plugins/**/plugin.rb', __dir__))
+      end
+
+      def self.core_plugin_name(path)
+        m = %r{.*/yle_tf_plugins/(?<name>.+?)/plugin\.rb$}.match(path)
+        m ? m[:name] : path
       end
 
       def self.bundler_plugins
