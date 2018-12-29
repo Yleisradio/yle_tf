@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'open3'
 require 'yle_tf/error'
 require 'yle_tf/tf_hook'

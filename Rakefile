@@ -3,6 +3,11 @@
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new(:spec)
+namespace :test do
+  desc 'Run unit tests'
+  RSpec::Core::RakeTask.new(:unit) do |t|
+    t.pattern = 'test/unit/**/*_spec.rb'
+  end
+end
 
-task default: :spec
+task default: 'test:unit'
