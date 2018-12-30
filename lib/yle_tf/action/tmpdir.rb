@@ -22,7 +22,7 @@ class YleTf
           @app.call(env)
         end
       ensure
-        FileUtils.rm_r(tmpdir) if tmpdir && Dir.exist?(tmpdir)
+        FileUtils.rm_rf(tmpdir, secure: true) if tmpdir && Dir.exist?(tmpdir)
       end
 
       def tmpdir_prefix(config)
