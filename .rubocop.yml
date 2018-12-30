@@ -12,6 +12,7 @@ Metrics/BlockLength:
   Exclude:
     - '*.gemspec'
     - 'test/unit/**/*'
+    - 'Rakefile'
 
 Metrics/ClassLength:
   Severity: warning

@@ -1,0 +1,2 @@
+backend:
+  file: "acceptance_<%= @module %>_<%= @env %>.tfstate"
