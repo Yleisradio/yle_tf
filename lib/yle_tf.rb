@@ -4,6 +4,8 @@ require 'yle_tf/logger'
 require 'yle_tf/version'
 
 class YleTf
+  TERRAFORM_VERSION_REQUIREMENT = '>= 0.9'
+
   autoload :Action,  'yle_tf/action'
   autoload :Error,   'yle_tf/error'
   autoload :Plugin,  'yle_tf/plugin'

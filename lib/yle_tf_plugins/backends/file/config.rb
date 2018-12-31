@@ -7,11 +7,7 @@ module YleTfPlugins
     module File
       class Config < YleTf::BackendConfig
         def generate_config
-          yield if block_given?
-        end
-
-        def cli_args
-          nil
+          # Do nothing, as the state file is just symlinked
         end
       end
     end

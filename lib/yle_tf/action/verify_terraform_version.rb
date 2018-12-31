@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'yle_tf'
 require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/system'
@@ -19,22 +20,32 @@ class YleTf
         raise(Error, 'Terraform not found') if !version
 
         Logger.debug("Terraform version: #{version}")
-        verify_version(env)
+
+        verify_version(version, requirement_by_yletf, required_by: 'YleTf')
+        verify_version(version, requirement_by_config(env), required_by: 'config')
 
         @app.call(env)
       end
 
       def terraform_version
         v = YleTf::System.read_cmd('terraform', 'version', error_handler: proc {})
-        Regexp.last_match(1) if v =~ /^Terraform v([^\s]+)/
+        m = /^Terraform v(?<version>[^\s]+)/.match(v)
+        m && m[:version]
       end
 
-      def verify_version(env)
-        version = env[:terraform_version]
+      def requirement_by_config(env)
         requirement = env[:config].fetch('terraform', 'version_requirement') { nil }
+        VersionRequirement.new(requirement)
+      end
 
-        if !VersionRequirement.new(requirement).satisfied_by?(version)
-          raise Error, "Terraform version '#{requirement}' required, '#{version}' found"
+      def requirement_by_yletf
+        VersionRequirement.new(YleTf::TERRAFORM_VERSION_REQUIREMENT)
+      end
+
+      def verify_version(version, requirement, **opts)
+        if !requirement.satisfied_by?(version)
+          raise Error, "Terraform version '#{requirement}' required by #{opts[:required_by]}, " \
+                       "'#{version}' found"
         end
       end
     end
