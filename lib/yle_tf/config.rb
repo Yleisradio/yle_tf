@@ -5,23 +5,29 @@ require 'yaml'
 
 require 'yle_tf/config/loader'
 require 'yle_tf/error'
-require 'yle_tf/logger'
 
 class YleTf
   # Configuration object to be used especially by the middleware stack
   class Config
     NotFoundError = Class.new(Error)
 
+    # Loads the configuration based on the environment
+    def self.load(tf_env)
+      opts = {
+        tf_env:     tf_env,
+        module_dir: Pathname.pwd
+      }
+
+      config = Loader.new(opts).load
+      new(config, opts)
+    end
+
     attr_reader :config, :tf_env, :module_dir
 
-    def initialize(tf_env)
-      Logger.debug("Initializing configuration for the #{tf_env.inspect} environment")
-
-      @tf_env = tf_env
-      @module_dir = Pathname.pwd
-      @config = Loader.new(tf_env: tf_env, module_dir: module_dir).load
-
-      Logger.debug(inspect)
+    def initialize(config, **opts)
+      @config = config
+      @tf_env = opts[:tf_env]
+      @module_dir = opts[:module_dir]
     end
 
     def to_s
