@@ -35,7 +35,7 @@ class YleTf
       block ||= DEFAULT_NOT_FOUND_BLOCK
 
       keys.inject(config) do |conf, key|
-        break block.call(keys) if !conf || !conf.key?(key)
+        break block.call(keys) if conf.nil? || !conf.is_a?(Hash) || !conf.key?(key)
 
         conf[key]
       end
