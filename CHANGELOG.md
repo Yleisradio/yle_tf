@@ -1,5 +1,27 @@
-## 1.0.1 / _Not released yet_
+## 1.1.0 / _Not released yet_
 
+Compatibility:
+
+- Drop (already broken) support for Terraform 0.8 and older ([GH-22](https://github.com/Yleisradio/yle_tf/pull/22))
+- Drop Ruby 2.2 support ([GH-15](https://github.com/Yleisradio/yle_tf/pull/15))
+
+New features:
+
+- Support maps and lists in `tf_vars` ([GH-14](https://github.com/Yleisradio/yle_tf/pull/14), [GH-17](https://github.com/Yleisradio/yle_tf/pull/17))
+  * Also add `module_dir` to the configuration evaluation context
+
+Improvements:
+
+- Improved tests! For example:
+  * Test also with Ruby 2.6 ([GH-19](https://github.com/Yleisradio/yle_tf/pull/19))
+  * Add some acceptance tests for Terraform versions 0.9 - 0.11 ([GH-20](https://github.com/Yleisradio/yle_tf/pull/20))
+  * Add more unit tests
+
+Bug fixes:
+
+- Remove tmp dirs securely, but with force ([ad96a4fb](https://github.com/Yleisradio/yle_tf/commit/ad96a4fb))
+- Fix configuration access when the key chain is not a Hash ([GH-19](https://github.com/Yleisradio/yle_tf/pull/19), [2de9c2e7](https://github.com/Yleisradio/yle_tf/commit/2de9c2e7))
+- Fix some debug output cases
 
 ## 1.0.0  / 2018-09-10
 
