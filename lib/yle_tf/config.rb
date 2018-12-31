@@ -5,6 +5,7 @@ require 'yaml'
 
 require 'yle_tf/config/loader'
 require 'yle_tf/error'
+require 'yle_tf/logger'
 
 class YleTf
   # Configuration object to be used especially by the middleware stack
@@ -41,9 +42,15 @@ class YleTf
       block ||= DEFAULT_NOT_FOUND_BLOCK
 
       keys.inject(config) do |conf, key|
-        break block.call(keys) if conf.nil? || !conf.is_a?(Hash) || !conf.key?(key)
+        next conf[key] if conf.is_a?(Hash) && conf.key?(key)
 
-        conf[key]
+        if !conf.nil? && !conf.is_a?(Hash)
+          Logger.warn(
+            "Configuration [#{keys.join(' > ')}] includes non-hash element #{conf.inspect}"
+          )
+        end
+
+        break block.call(keys)
       end
     end
 

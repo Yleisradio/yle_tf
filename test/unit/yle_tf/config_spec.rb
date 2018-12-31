@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yle_tf/config'
+require 'yle_tf/logger'
 
 describe YleTf::Config do
   subject(:config) { described_class.new(config_hash, opts) }
@@ -29,6 +30,9 @@ describe YleTf::Config do
   end
 
   describe '#fetch' do
+    subject(:fetch) { config.fetch(*keys, &block) }
+
+    let(:block) { nil }
     let(:config_hash) do
       {
         'foo'  => 'bar',
@@ -57,19 +61,59 @@ describe YleTf::Config do
       expect(config.fetch('some', 'deep')).to eq('thing' => 99)
     end
 
-    context 'with default block' do
-      it { expect { config.fetch('non_existing') }.to raise_error(YleTf::Config::NotFoundError) }
-    end
+    context 'when the key is not found' do
+      before { allow(YleTf::Logger).to receive(:warn) }
 
-    context 'with specified block' do
-      let(:subject) { config.fetch('foo', 'bar', &block) }
-      let(:block) { ->(_keys) { 'my_default_value' } }
+      context 'with default block' do
+        let(:keys) { %w[nonexisting] }
 
-      it { is_expected.to eq('my_default_value') }
+        it { expect { fetch }.to raise_error(YleTf::Config::NotFoundError) }
 
-      it 'calls the block' do
-        expect(block).to receive(:call).with(%w[foo bar])
-        subject
+        context 'with nonexisting key' do
+          let(:keys) { %w[some non_existing] }
+
+          it 'does not warn' do
+            expect(YleTf::Logger).not_to receive(:warn)
+            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/HandleExceptions
+          end
+        end
+
+        context 'with broken key chain' do
+          let(:keys) { %w[foo non_existing] }
+
+          it 'warns' do
+            expect(YleTf::Logger).to receive(:warn)
+            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/HandleExceptions
+          end
+        end
+      end
+
+      context 'with specified block' do
+        let(:keys) { %w[some thing missing] }
+        let(:block) { ->(_keys) { 'my_default_value' } }
+
+        it { is_expected.to eq('my_default_value') }
+
+        it 'calls the block' do
+          expect(block).to receive(:call).with(%w[some thing missing])
+          fetch
+        end
+
+        context 'with nonexisting key' do
+          it 'does not warn' do
+            expect(YleTf::Logger).not_to receive(:warn)
+            fetch
+          end
+        end
+
+        context 'with broken key chain' do
+          let(:keys) { %w[foo non_existing] }
+
+          it 'warns' do
+            expect(YleTf::Logger).to receive(:warn)
+            fetch
+          end
+        end
       end
     end
   end
