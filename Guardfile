@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-guard :rspec, cmd: 'bundle exec rspec --format progress', spec_paths: ['test/unit'] do
-  require 'guard/rspec/dsl'
-  dsl = Guard::RSpec::Dsl.new(self)
+spec_dir = 'test/unit'
 
+guard :rspec, cmd: 'bundle exec rspec --format progress', spec_paths: [spec_dir] do
   # RSpec files
-  rspec = dsl.rspec
-  watch(rspec.spec_helper) { rspec.spec_dir }
-  watch(rspec.spec_support) { rspec.spec_dir }
-  watch(rspec.spec_files)
+  watch('test/spec_helper.rb') { spec_dir }
+  watch(%r{^test/support/.+\.rb$}) { spec_dir }
+  watch(%r{^#{spec_dir}/.+_spec\.rb$})
+  watch(%r{^#{spec_dir}/fixtures/([^/]+)/}) { |m| "#{spec_dir}/#{m[1]}_spec.rb" }
 
   # Ruby files
-  ruby = dsl.ruby
-  dsl.watch_spec_files_for(ruby.lib_files)
+  watch(%r{^lib/(.+)\.rb$}) { |m| "#{spec_dir}/#{m[1]}_spec.rb" }
+  watch(%r{^vendor/.+\.rb$}) { spec_dir }
 end

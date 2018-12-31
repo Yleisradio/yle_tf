@@ -19,11 +19,13 @@ namespace :test do
     tasks = namespace(t.name) {}.tasks
 
     TestSupport::Rake.terraform_versions(args, default: 'latest').each do |v|
-      rake_output_message "Running with Terraform version: #{v}"
+      rake_output_message "#########################################################\n" \
+                          "# Running with Terraform version: #{v}\n\n"
       tasks.each do |task|
         # Force running the tasks multiple times (with different Terraform versions)
         task.reenable
         task.invoke(v)
+        rake_output_message ''
       end
     end
   end

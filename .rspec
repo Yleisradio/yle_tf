@@ -1,3 +1,6 @@
 --color
 --default-path test
+--force-color
+--format documentation
+--order random
 --require spec_helper
