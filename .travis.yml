@@ -1,8 +1,20 @@
 language: ruby
 cache: bundler
 
+services:
+  - docker
+
+before_install:
+  - for v in $TERRAFORM_VERSIONS; do docker pull hashicorp/terraform:$v; done
+
+script: bundle exec rake "test[$TERRAFORM_VERSIONS]"
+
 rvm:
   - 2.6.0
   - 2.5.3
   - 2.4.5
   - 2.3.8
+
+env:
+  global:
+    - TERRAFORM_VERSIONS="0.11.11 0.10.8 0.9.11"

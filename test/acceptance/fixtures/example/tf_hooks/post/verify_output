@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+output="$(cat tf_example_test)"
+
+if test "$output" != 'hello, test world!'; then
+  echo "Invalid output: '$output'" >&2
+  exit 1
+fi
+
+echo "$output"

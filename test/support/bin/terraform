@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# Wrapper to run different Terraform versions in Docker
+
+set -Eeu -o pipefail
+
+# Environment variables
+: "${TERRAFORM_VERSION:=latest}"
+
+if [[ -n "${SIMULATE_NONEXISTING_TERRAFORM:-}" ]]; then
+    exit 1
+fi
+
+DOCKER_IMAGE="hashicorp/terraform:$TERRAFORM_VERSION"
+
+exec docker run -t --rm \
+    -v "$HOME:$HOME" \
+    -v "$PWD:$PWD" \
+    -w "$PWD" \
+    "$DOCKER_IMAGE" "$@"

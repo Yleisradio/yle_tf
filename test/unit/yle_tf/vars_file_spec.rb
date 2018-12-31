@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 require 'fileutils'
 require 'ostruct'
 require 'tempfile'
@@ -12,7 +10,7 @@ describe YleTf::VarsFile do
   describe '.find_env_vars_file' do
     subject { described_class.find_env_vars_file(config) }
     let(:config) { OpenStruct.new(module_dir: module_dir, tf_env: tf_env) }
-    let(:module_dir) { 'spec/fixtures/vars_files' }
+    let(:module_dir) { 'test/unit/fixtures/vars_files' }
 
     context 'with existing var file' do
       let(:tf_env) { 'diu' }
@@ -32,7 +30,7 @@ describe YleTf::VarsFile do
     let(:config) { OpenStruct.new(module_dir: module_dir) }
 
     context 'with existing var files' do
-      let(:module_dir) { 'spec/fixtures/vars_files' }
+      let(:module_dir) { 'test/unit/fixtures/vars_files' }
       it { is_expected.to eq(%w[dau diu]) }
     end
 
@@ -52,9 +50,9 @@ describe YleTf::VarsFile do
         FileUtils.cp(original_tfvars, f.path)
       end
     end
-    let(:original_tfvars) { 'spec/fixtures/vars_files/envs/dau.tfvars' }
-    let(:append_tfvars) { 'spec/fixtures/vars_files/envs/diu.tfvars' }
-    let(:final_tfvars) { 'spec/fixtures/vars_files/append_file.final.tfvars' }
+    let(:original_tfvars) { 'test/unit/fixtures/vars_files/envs/dau.tfvars' }
+    let(:append_tfvars) { 'test/unit/fixtures/vars_files/envs/diu.tfvars' }
+    let(:final_tfvars) { 'test/unit/fixtures/vars_files/append_file.final.tfvars' }
 
     it do
       subject.append_file(described_class.new(append_tfvars))
@@ -72,9 +70,9 @@ describe YleTf::VarsFile do
         FileUtils.cp(original_tfvars, f.path)
       end
     end
-    let(:original_tfvars) { 'spec/fixtures/vars_files/envs/dau.tfvars' }
-    let(:appends_yaml) { 'spec/fixtures/vars_files/append_vars.append.yaml' }
-    let(:final_tfvars) { 'spec/fixtures/vars_files/append_vars.final.tfvars' }
+    let(:original_tfvars) { 'test/unit/fixtures/vars_files/envs/dau.tfvars' }
+    let(:appends_yaml) { 'test/unit/fixtures/vars_files/append_vars.append.yaml' }
+    let(:final_tfvars) { 'test/unit/fixtures/vars_files/append_vars.final.tfvars' }
 
     it do
       subject.append_vars(YAML.safe_load(IO.read(appends_yaml)))

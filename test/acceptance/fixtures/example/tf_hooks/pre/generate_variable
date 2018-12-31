@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+FILE='generated_vars.tf.json'
+
+echo "Generating '$FILE'"
+
+cat >"$FILE" <<VARS_JSON
+{
+  "variable": {
+    "from_hook": {
+      "default": "hello"
+    }
+  }
+}
+VARS_JSON
