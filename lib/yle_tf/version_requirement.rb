@@ -5,11 +5,6 @@ require 'rubygems'
 class YleTf
   # Helper class for comparing versions
   class VersionRequirement
-    # Checks if the specified Terrform version is older than 0.9
-    def self.pre_0_9?(terraform_version)
-      new('< 0.9.0-beta').satisfied_by?(terraform_version)
-    end
-
     attr_reader :requirement
 
     def initialize(requirement)

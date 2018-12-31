@@ -4,7 +4,6 @@ require 'yle_tf/error'
 require 'yle_tf/logger'
 require 'yle_tf/plugin'
 require 'yle_tf/system'
-require 'yle_tf/version_requirement'
 
 class YleTf
   module Action
@@ -27,31 +26,16 @@ class YleTf
         Logger.info('Initializing Terraform')
         Logger.debug("Backend configuration: #{backend}")
 
-        if VersionRequirement.pre_0_9?(env[:terraform_version])
-          init_pre_0_9(backend)
-        else
-          init(backend)
-        end
+        init(backend)
 
         @app.call(env)
       end
 
-      def init_pre_0_9(backend)
-        cli_args = backend.cli_args
-        if cli_args
-          YleTf::System.cmd('terraform', 'remote', 'config', *TF_CMD_ARGS, *cli_args, TF_CMD_OPTS)
-        end
-
-        Logger.debug('Fetching Terraform modules')
-        YleTf::System.cmd('terraform', 'get', *TF_CMD_ARGS, TF_CMD_OPTS)
-      end
-
       def init(backend)
-        Logger.debug('Generating the backend configuration')
-        backend.generate_config do
-          Logger.debug('Initializing Terraform')
-          YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, TF_CMD_OPTS)
-        end
+        Logger.debug('Configuring the backend')
+        backend.generate_config
+        Logger.debug('Initializing Terraform')
+        YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, TF_CMD_OPTS)
       end
 
       def backend_config(config)
