@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 require 'yle_tf'
+require 'yle_tf/backend'
 
 module YleTfPlugins
   module Backends
-    module Swift
+    module Default
       class Plugin < YleTf::Plugin
         register
 
-        backend('swift') do
-          require_relative 'command'
-          Command
+        backend(DEFAULT_BACKEND) do
+          YleTf::Backend
         end
       end
     end

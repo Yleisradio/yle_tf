@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'yle_tf/helpers/hash'
+
 class YleTf
   class Config
     module Defaults
@@ -9,11 +11,13 @@ class YleTf
           'post' => []
         },
         'backend'   => {
-          'type'    => 'file',
-          'bucket'  => nil,
-          'file'    => '<%= @module %>_<%= @env %>.tfstate',
-          'region'  => nil,
-          'encrypt' => false,
+          'type' => 'file',
+          'file' => {
+            'path' => '<%= @module %>_<%= @env %>.tfstate'
+          },
+          's3'   => {
+            'key' => '<%= @module %>_<%= @env %>.tfstate'
+          }
         },
         'tfvars'    => {
         },
@@ -22,8 +26,9 @@ class YleTf
         }
       }.freeze
 
+      # Returns deep copy of the default config Hash.
       def default_config
-        DEFAULT_CONFIG.dup
+        Helpers::Hash.deep_copy(DEFAULT_CONFIG)
       end
 
       def default_config_context

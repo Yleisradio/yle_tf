@@ -295,7 +295,14 @@ _Note that the instance type is now t2.medium._
 
 Here be dragons that configure your project. The tools searches for `tf.yaml`'s up your path all the way to root `/`. Configs made in subdirectories override those made upper in the path. This makes it easy to define common settings without having to edit `tf.yaml` in every project.
 
+The configuration value are evaluated with ERB. This is useful for example to form tfstate file name based on the module name and environment. The variables available are:
+
+* `env` - The environment
+* `module` - The (directory) name of the root module
+* `module_dir` - The absolute path of the module directory
+
 By default the following configuration options are supported:
+
 * [`hooks`](#hooks) - Pre and Post hooks.
 * [`backend`](#backend) - Configuration of remote state location.
 * [`terraform`](#terraform) - Terraform specific configuration.
@@ -305,10 +312,12 @@ By default the following configuration options are supported:
 There are cases when it would be beneficial to run a task at the same time as Terrafrom, but building native support for that would be quite cumbersome. The support for hooks was build into YleTf having those cases in mind.
 
 Essentially hooks are just scripts and small applications to extend the functionality of Terraform. Hooks can be either
+
 * [local](#local-hooks) or
 * [remote](#remote-hooks) i.e. stored into git.
 
 Real world use cases for hooks include at least the following:
+
 * Automatically register ACM certificates and link them to desired resources
 * Automatically generate DNS record resources that are managed by separate configuration
 * Package lambda applications for deployment via Terraform
@@ -316,12 +325,13 @@ Real world use cases for hooks include at least the following:
 * Modify parameters not yet supported by Terraform
 
 Currently two kinds of hooks are supported:
+
 * `pre` - Hooks that run before Terraform execution.
 * `post` - Hooks that run after Terraform execution.
 
 #### Local hooks
 
-For local hooks, add a directory called `tf_hooks` to your tf project root. You also need a folder to determine wether the hook is run before or after the execution of Terraform. The folders are `pre` and/or `post`:
+For local hooks, add a directory called `tf_hooks` to your tf project root. You also need a folder to determine whether the hook is run before or after the execution of Terraform. The folders are `pre` and/or `post`:
 
 ```
 .
@@ -412,20 +422,39 @@ hooks:
 
 #### Backend
 
-Configure where Terraform [remote state](https://www.terraform.io/docs/state/remote.html) is stored
+Configure where Terraform [remote state](https://www.terraform.io/docs/state/remote.html) is stored. See the Terraform documentation for [backends](https://www.terraform.io/docs/backends/) and especially [types](https://www.terraform.io/docs/backends/types/) for backend specific configuration options.
 
-* `type` - Backend type where the Terraform state is stored.
-* `bucket` - The name of the S3 bucket.
-* `file` - The name of the state file.
-* `region` - The region of the S3 bucket.
-* `encrypt` - Whether to enable server side encryption of the state file.
+_Note:_ the `local` backend type is not supported due to YleTf initialization process and use of temporary directory. Use the default `file` type instead, which makes a symlink to the state file in the working directory.
+
+```yaml
+type: <type>        # Backend type where the Terraform state is stored, e.g. `file` (local file), `s3`, `swift`.
+<type>:             # Backend type specific options
+  <option>: <value> # that map directly to the Terraform's ones.
+  # [...]
+```
+
+Default backend configuration:
+
+```yaml
+backend:
+  type: file
+  file:
+    path: "<%= @module %>_<%= @env %>.tfstate" # Relative or absolute path to a file
+  s3:
+    key: "<%= @module %>_<%= @env %>.tfstate" # Path of the state file in the bucket
+```
+
+Example S3 backend configuration:
 
 ```yaml
 backend:
   type: s3
+  s3:
+    region: eu-west-1
+    # Use the sanitized directory name right after the "src/" directory as part of the bucket name.
+    bucket: 'terraform-state-<%= @module_dir.match(%r{.*/src/([^/]+)/})[1].downcase.tr("^a-z0-9", "-") %>-<%= @env %>'
+    encrypt: true
 ```
-
-Currently local file, S3, and Swift are supported.
 
 #### Terraform
 

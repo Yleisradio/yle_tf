@@ -6,6 +6,7 @@ class YleTf
     autoload :Loader, 'yle_tf/plugin/loader'
     autoload :Manager, 'yle_tf/plugin/manager'
 
+    DEFAULT_BACKEND = Object.new.freeze
     DEFAULT_COMMAND = Object.new.freeze
 
     def self.manager
@@ -51,7 +52,8 @@ class YleTf
     end
 
     def self.backend(type, &block)
-      backends[type.to_sym] = block
+      type = type.to_s if type.is_a?(Symbol)
+      backends[type] = block
     end
   end
 end

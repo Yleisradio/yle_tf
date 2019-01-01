@@ -1,2 +1,3 @@
 backend:
-  file: "acceptance_<%= @module %>_<%= @env %>.tfstate"
+  file:
+    path: "acceptance_<%= @module %>_<%= @env %>.tfstate"

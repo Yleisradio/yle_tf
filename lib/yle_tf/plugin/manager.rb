@@ -44,6 +44,7 @@ class YleTf
           registered.each do |plugin|
             backends.merge!(plugin.backends)
           end
+          backends.default = backends.delete(DEFAULT_BACKEND)
         end
       end
     end
