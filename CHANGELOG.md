@@ -1,21 +1,25 @@
-## 1.1.0 / _Not released yet_
+## 1.1.0.rc1 / 2019-01-01
 
 Compatibility:
 
 - Drop (already broken) support for Terraform 0.8 and older ([GH-22](https://github.com/Yleisradio/yle_tf/pull/22))
 - Drop Ruby 2.2 support ([GH-15](https://github.com/Yleisradio/yle_tf/pull/15))
+- Backend plugin interface has changed and is not compatible with the old one. The old configuration is automatically migrated, though. ([GH-18](https://github.com/Yleisradio/yle_tf/pull/18))
 
 New features:
 
+- Support all Terraform backends and all their attributes ([GH-18](https://github.com/Yleisradio/yle_tf/pull/18))
+    * The `file` backend is still default (and should probably be used instead of Terraform's `local` backend).
+    * Backend configuration has changes. See [the migration guide](https://github.com/Yleisradio/yle_tf/wiki/Migrating-Configuration) for more details.
 - Support maps and lists in `tf_vars` ([GH-14](https://github.com/Yleisradio/yle_tf/pull/14), [GH-17](https://github.com/Yleisradio/yle_tf/pull/17))
-  * Also add `module_dir` to the configuration evaluation context
+    * Also add `module_dir` to the configuration evaluation context
 
 Improvements:
 
 - Improved tests! For example:
-  * Test also with Ruby 2.6 ([GH-19](https://github.com/Yleisradio/yle_tf/pull/19))
-  * Add some acceptance tests for Terraform versions 0.9 - 0.11 ([GH-20](https://github.com/Yleisradio/yle_tf/pull/20))
-  * Add more unit tests
+    * Test also with Ruby 2.6 ([GH-19](https://github.com/Yleisradio/yle_tf/pull/19))
+    * Add some acceptance tests for Terraform versions 0.9 - 0.11 ([GH-20](https://github.com/Yleisradio/yle_tf/pull/20))
+    * Add more unit tests
 
 Bug fixes:
 
@@ -53,8 +57,8 @@ Only change after 0.4.0 is:
 New features:
 
 - Support for IO handlers for `System.cmd` commands ([GH-4](https://github.com/Yleisradio/yle_tf/pull/4))
-  * Pipe most command and hook output to Logger with reasonable log level
-  * Add log level support for YleTf hook output
+    * Pipe most command and hook output to Logger with reasonable log level
+    * Add log level support for YleTf hook output
 
 Improvements:
 
