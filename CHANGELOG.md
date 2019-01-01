@@ -1,3 +1,6 @@
+## 1.1.0.rc2 / _Not released yet_
+
+
 ## 1.1.0.rc1 / 2019-01-01
 
 Compatibility:
