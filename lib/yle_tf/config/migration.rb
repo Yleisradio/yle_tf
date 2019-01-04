@@ -42,7 +42,14 @@ class YleTf
       end
 
       def migrated_config
-        migrate_old_backend_config do |new_config|
+        migrate_old_backend_config(&deprecation_warning)
+      end
+
+      # Returns a `Proc` to print deprecation warnings unless denied by an env var
+      def deprecation_warning
+        return nil if ENV['TF_OLD_CONFIG_WARNINGS'] == 'false'
+
+        ->(new_config) do
           Logger.warn("Old configuration found in #{config_source}")
           Logger.warn("Please migrate to relevant parts of:\n" \
                       "#{sanitize_config(new_config)}")
@@ -60,7 +67,7 @@ class YleTf
           migrate_old_backend_config_keys(prev_config, type, keys) { changed = true }
         end
 
-        yield(new_config) if changed
+        yield(new_config) if changed && block_given?
 
         new_config
       end
