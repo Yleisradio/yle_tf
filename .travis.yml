@@ -5,6 +5,10 @@ services:
   - docker
 
 before_install:
+  # Install Bundler v2 as Travis still uses v1.x
+  - gem update --system
+  - gem install bundler
+  # Pull images to avoid extraneous output when calling `terraform` wrapper
   - for v in $TERRAFORM_VERSIONS; do docker pull hashicorp/terraform:$v; done
 
 script: bundle exec rake "test[$TERRAFORM_VERSIONS]"
