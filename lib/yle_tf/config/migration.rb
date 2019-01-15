@@ -49,7 +49,7 @@ class YleTf
       def deprecation_warning
         return nil if ENV['TF_OLD_CONFIG_WARNINGS'] == 'false'
 
-        ->(new_config) do
+        lambda do |new_config|
           Logger.warn("Old configuration found in #{config_source}")
           Logger.warn("Please migrate to relevant parts of:\n" \
                       "#{sanitize_config(new_config)}")
