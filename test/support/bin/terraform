@@ -9,6 +9,8 @@ set -Eeu -o pipefail
 
 if [[ -n "${SIMULATE_NONEXISTING_TERRAFORM:-}" ]]; then
     exit 1
+elif [[ -n "${USE_SYSTEM_TERRAFORM:-}" ]]; then
+    exec "$USE_SYSTEM_TERRAFORM" "$@"
 fi
 
 DOCKER_IMAGE="hashicorp/terraform:$TERRAFORM_VERSION"
