@@ -23,6 +23,9 @@ class YleTf
         },
         'terraform' => {
           'version_requirement' => nil
+        },
+        'yle_tf'    => {
+          'version_requirement' => nil
         }
       }.freeze
 
