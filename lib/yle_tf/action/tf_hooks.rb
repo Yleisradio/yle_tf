@@ -3,9 +3,6 @@
 require 'yle_tf/logger'
 require 'yle_tf/tf_hook/runner'
 
-require 'yle_tf/logger'
-require 'yle_tf/tf_hook/runner'
-
 class YleTf
   module Action
     class TfHooks
