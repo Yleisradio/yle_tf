@@ -1,5 +1,9 @@
-## 1.1.1.dev / _Not released yet_
+## 1.2.0 / _Not released yet_
 
+New features:
+
+- Allow configuring YleTf version requirement in tf.yaml ([GH-25](https://github.com/Yleisradio/yle_tf/pull/25))
+- Pass original module directory to hooks as `TF_MODULE_DIR` env var ([GH-24](https://github.com/Yleisradio/yle_tf/pull/24))
 
 ## 1.1.0 / 2019-01-05
 
