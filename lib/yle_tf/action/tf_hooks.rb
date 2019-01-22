@@ -3,9 +3,6 @@
 require 'yle_tf/logger'
 require 'yle_tf/tf_hook/runner'
 
-require 'yle_tf/logger'
-require 'yle_tf/tf_hook/runner'
-
 class YleTf
   module Action
     class TfHooks
@@ -23,7 +20,7 @@ class YleTf
 
       def hook_runner
         if run_hooks?
-          TfHook::Runner.new(@env[:config], hook_env)
+          TfHook::Runner.new(config, hook_env)
         else
           NoRunner
         end
@@ -31,9 +28,14 @@ class YleTf
 
       def hook_env
         {
-          'TF_COMMAND' => @env[:tf_command],
-          'TF_ENV'     => @env[:tf_env],
+          'TF_COMMAND'    => @env[:tf_command],
+          'TF_ENV'        => @env[:tf_env],
+          'TF_MODULE_DIR' => config.module_dir.to_s,
         }
+      end
+
+      def config
+        @env[:config]
       end
 
       def run_hooks?
