@@ -26,7 +26,8 @@ describe YleTf::Config::Loader do
           },
           'hooks'     => { 'pre' => [], 'post' => [] },
           'tfvars'    => {},
-          'terraform' => { 'version_requirement' => nil }
+          'terraform' => { 'version_requirement' => nil },
+          'yle_tf'    => { 'version_requirement' => nil }
         )
       end
     end
@@ -64,7 +65,8 @@ describe YleTf::Config::Loader do
           },
           'hooks'     => { 'pre' => [], 'post' => [] },
           'tfvars'    => { 'xxx' => 'yyy' },
-          'terraform' => { 'version_requirement' => nil }
+          'terraform' => { 'version_requirement' => nil },
+          'yle_tf'    => { 'version_requirement' => nil }
         )
       end
     end

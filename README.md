@@ -465,6 +465,15 @@ terraform:
   version_requirement: "~> 0.9.11"
 ```
 
+#### YleTf
+
+* `version_requirement` - The version requirement of YleTf in ruby gem syntax.
+
+```yaml
+yle_tf:
+  version_requirement: ">= 1.2"
+```
+
 ## Plugins
 
 Available plugins are listed on the [wiki page](https://github.com/Yleisradio/yle_tf/wiki#plugins)

@@ -12,11 +12,13 @@ class YleTf
     autoload :TmpDir, 'yle_tf/action/tmpdir'
     autoload :VerifyTerraformVersion, 'yle_tf/action/verify_terraform_version'
     autoload :VerifyTfEnv, 'yle_tf/action/verify_tf_env'
+    autoload :VerifyYleTfVersion, 'yle_tf/action/verify_yle_tf_version'
     autoload :WriteTerraformrcDefaults, 'yle_tf/action/write_terraformrc_defaults'
 
     def self.default_action_stack(command_class = nil)
       Builder.new do
         use LoadConfig
+        use VerifyYleTfVersion
         use VerifyTfEnv
         use TmpDir
         use WriteTerraformrcDefaults
