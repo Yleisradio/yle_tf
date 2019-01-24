@@ -1,4 +1,4 @@
-## 1.2.0 / _Not released yet_
+## 1.2.0 / 2019-01-24
 
 New features:
 
