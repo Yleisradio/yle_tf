@@ -1,6 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.4
 
+Gemspec/RequiredRubyVersion:
+  Severity: warning
+
 Layout/AlignHash:
   EnforcedHashRocketStyle: table
   EnforcedColonStyle: table
