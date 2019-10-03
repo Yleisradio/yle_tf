@@ -50,7 +50,7 @@ class YleTf
           if TF_OPTIONS.include?(arg)
             @tf_options[key(arg)] = true
           else
-            STDERR.puts "Unknown option '#{arg}'"
+            warn "Unknown option '#{arg}'"
             @tf_command = 'help'
             @tf_env = 'error'
             break
