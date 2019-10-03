@@ -11,6 +11,8 @@ Offers a command-line helper tool, `tf`
 
 YleTf requires Terraform which can be installed according to their [instructions](https://www.terraform.io/intro/getting-started/install.html). On MacOS (and OSX) you can use [Homebrew](https://brew.sh/). You can also easily install and manage multiple versions of Terraform with [homebrew-terraforms](https://github.com/Yleisradio/homebrew-terraforms).
 
+YleTf supports Terraform versions from 0.9 on. Tested versions range from 0.9 to 0.12".
+
 ## Installation
 
 YleTf can be installed as a gem:
