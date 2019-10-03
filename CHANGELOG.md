@@ -1,5 +1,9 @@
 ## 1.2.1 / _Not released yet_
 
+Compatibility:
+
+- Add Terraform 0.12 to the test matrix. Document the supported versions. ([GH-27](https://github.com/Yleisradio/yle_tf/pull/27))
+- Drop Ruby 2.3 from the test matrix. Document the supported versions. ([GH-28](https://github.com/Yleisradio/yle_tf/pull/28), [GH-26](https://github.com/Yleisradio/yle_tf/pull/26))
 
 ## 1.2.0 / 2019-01-24
 
