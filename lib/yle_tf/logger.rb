@@ -23,7 +23,6 @@ class YleTf
 
     def self.logger
       @logger ||= ::Logger.new(DEVICE).tap do |logger|
-        patch_for_old_ruby(logger)
         logger.level = log_level
         logger.formatter = log_formatter
       end
@@ -63,15 +62,6 @@ class YleTf
         :red
       when 'WARN'
         :brown
-      end
-    end
-
-    # Patches the `::Logger` in older Ruby versions to
-    # accept log level as a `String`
-    def self.patch_for_old_ruby(logger)
-      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.3')
-        require_relative '../../vendor/logger_level_patch'
-        logger.extend(LoggerLevelPatch)
       end
     end
   end
