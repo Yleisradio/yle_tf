@@ -10,7 +10,7 @@ class YleTf
       RC_PATH = '~/.terraformrc'
 
       # Path of the plugin cache directory
-      DEFAULT_PLUGIN_CACHE_PATH = '~/.terraform.d/plugin-cache'
+      DEFAULT_PLUGIN_CACHE_PATH = '$HOME/.terraform.d/plugin-cache'
 
       def initialize(app)
         @app = app
