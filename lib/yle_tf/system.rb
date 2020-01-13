@@ -3,6 +3,7 @@
 require 'English'
 require 'open3'
 require 'shellwords'
+require 'stringio'
 require 'thwait'
 require 'yle_tf/error'
 require 'yle_tf/logger'
