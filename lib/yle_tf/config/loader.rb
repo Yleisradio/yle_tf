@@ -91,7 +91,7 @@ class YleTf
 
       def migrate_old_config(config, **opts)
         task('  -> Migrating') do
-          Config::Migration.migrate_old_config(config, opts)
+          Config::Migration.migrate_old_config(config, **opts)
         end
       end
 

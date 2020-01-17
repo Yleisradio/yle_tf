@@ -47,7 +47,7 @@ class YleTf
 
     def self.read_cmd(*args, **opts)
       buffer = StringIO.new
-      cmd(*args, opts.merge(stdout: buffer))
+      cmd(*args, **opts.merge(stdout: buffer))
       buffer.string
     end
 

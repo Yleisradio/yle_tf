@@ -19,9 +19,13 @@ describe YleTf::Action::VerifyTerraformVersion do
 
     let(:env) { { config: config } }
     let(:config) do
-      YleTf::Config.new('terraform' => {
-                          'version_requirement' => config_requirement
-                        })
+      YleTf::Config.new(
+        {
+          'terraform' => {
+            'version_requirement' => config_requirement
+          }
+        }
+      )
     end
     let(:config_requirement) { nil }
 

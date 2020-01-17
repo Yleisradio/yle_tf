@@ -4,7 +4,7 @@ require 'yle_tf/config'
 require 'yle_tf/logger'
 
 describe YleTf::Config do
-  subject(:config) { described_class.new(config_hash, opts) }
+  subject(:config) { described_class.new(config_hash, **opts) }
   let(:config_hash) { {} }
   let(:opts) { {} }
 
