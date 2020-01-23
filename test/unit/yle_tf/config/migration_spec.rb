@@ -10,7 +10,7 @@ describe YleTf::Config::Migration do
       allow(YleTf::Logger).to receive(:warn)
     end
 
-    subject { described_class.migrate_old_config(config, opts) }
+    subject { described_class.migrate_old_config(config, **opts) }
     let(:config) { { 'backend' => backend_config } }
     let(:opts) { { source: 'test' } }
 

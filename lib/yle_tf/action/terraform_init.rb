@@ -35,7 +35,7 @@ class YleTf
         backend.configure
 
         Logger.debug('Initializing Terraform')
-        YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, TF_CMD_OPTS)
+        YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, **TF_CMD_OPTS)
       end
 
       def backend(config)

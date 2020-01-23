@@ -20,7 +20,7 @@ class YleTf
       }
 
       config = Loader.new(opts).load
-      new(config, opts)
+      new(config, **opts)
     end
 
     attr_reader :config, :tf_env, :module_dir

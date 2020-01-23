@@ -13,7 +13,9 @@ describe YleTf::Action::VerifyYleTfVersion do
     let(:env) { { config: config } }
     let(:config) do
       YleTf::Config.new(
-        'yle_tf' => { 'version_requirement' => version_requirement }
+        {
+          'yle_tf' => { 'version_requirement' => version_requirement }
+        }
       )
     end
 

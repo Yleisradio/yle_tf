@@ -13,7 +13,7 @@ describe YleTf::Action::LoadConfig do
     let(:env) { { tf_env: tf_env, config: config } }
     let(:tf_env) { 'myenv' }
 
-    let(:dummy_config) { YleTf::Config.new('foo' => 'bar') }
+    let(:dummy_config) { YleTf::Config.new({ 'foo' => 'bar' }) }
 
     context 'when config not yet loaded' do
       let(:config) { nil }
