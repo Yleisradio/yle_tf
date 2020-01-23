@@ -74,7 +74,7 @@ describe YleTf::Config do
 
           it 'does not warn' do
             expect(YleTf::Logger).not_to receive(:warn)
-            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/HandleExceptions
+            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/SuppressedException
           end
         end
 
@@ -83,7 +83,7 @@ describe YleTf::Config do
 
           it 'warns' do
             expect(YleTf::Logger).to receive(:warn)
-            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/HandleExceptions
+            begin fetch; rescue YleTf::Error; end # rubocop:disable Lint/SuppressedException
           end
         end
       end

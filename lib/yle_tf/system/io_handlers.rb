@@ -108,7 +108,7 @@ class YleTf
         while (data = source.readpartial(BLOCK_SIZE))
           target.write(data)
         end
-      rescue EOFError # rubocop:disable Lint/HandleExceptions
+      rescue EOFError # rubocop:disable Lint/SuppressedException
         # All read
       rescue IOError => e
         YleTf::Logger.debug e.full_message
