@@ -13,7 +13,7 @@ YleTf requires Terraform which can be installed according to their [instructions
 
 YleTf supports Terraform versions from 0.9 on. Tested versions range from 0.9 to 0.12.
 
-YleTf also requires Ruby 2.3 or newer. Tested versions range from 2.4 to 2.6.
+YleTf also requires Ruby 2.3 or newer. Tested versions range from 2.4 to 2.7.
 
 ## Installation
 
