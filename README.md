@@ -1,7 +1,7 @@
 # YleTf
 
 [![Gem Version](https://badge.fury.io/rb/yle_tf.svg)](https://badge.fury.io/rb/yle_tf)
-[![Build Status](https://travis-ci.org/Yleisradio/yle_tf.svg?branch=master)](https://travis-ci.org/Yleisradio/yle_tf)
+[![Build Status](https://travis-ci.com/Yleisradio/yle_tf.svg?branch=master)](https://travis-ci.com/Yleisradio/yle_tf)
 
 A wrapper for [Terraform](https://www.terraform.io/) with support for hooks and environments.
 
