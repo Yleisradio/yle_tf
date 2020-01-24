@@ -72,7 +72,7 @@ describe YleTf::Action::TfHooks do
       end
 
       it 'calls next app' do
-        expect(app).to receive(:call).with(env).ordered
+        expect(app).to receive(:call).with(env)
 
         action.call(env)
       end
