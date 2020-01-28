@@ -1,5 +1,9 @@
 ## 1.2.1 / _Not released yet_
 
+Improvements:
+
+- Symlink `errored.tfstate` from run dir to module dir ([GH-31](https://github.com/Yleisradio/yle_tf/pull/31))
+
 Compatibility:
 
 - Support Ruby 2.7 ([GH-30](https://github.com/Yleisradio/yle_tf/pull/30))
