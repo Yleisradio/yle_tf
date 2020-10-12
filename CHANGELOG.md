@@ -1,4 +1,4 @@
-## 1.2.1 / _Not released yet_
+## 1.3.0 / 2020-10-12
 
 Improvements:
 
@@ -8,7 +8,7 @@ Compatibility:
 
 - Support Ruby 2.7 ([GH-30](https://github.com/Yleisradio/yle_tf/pull/30))
 - Drop Ruby 2.3 from the test matrix. Document the supported versions. ([GH-28](https://github.com/Yleisradio/yle_tf/pull/28), [GH-26](https://github.com/Yleisradio/yle_tf/pull/26))
-- Add Terraform 0.12 to the test matrix. Document the supported versions. ([GH-27](https://github.com/Yleisradio/yle_tf/pull/27))
+- Add Terraform 0.12 and 0.13 to the test matrix. Document the supported versions. ([GH-27](https://github.com/Yleisradio/yle_tf/pull/27))
 
 Bug fixes:
 
