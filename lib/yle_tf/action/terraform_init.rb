@@ -37,8 +37,11 @@ class YleTf
         Logger.debug('Configuring the backend')
         backend.configure
 
+        Logger.debug('Symlinking .terraform.lock.hcl')
+        symlink_to_module_dir('.terraform.lock.hcl')
+
         Logger.debug('Symlinking errored.tfstate')
-        symlink_errored_tfstate
+        symlink_to_module_dir('errored.tfstate')
 
         Logger.debug('Initializing Terraform')
         YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, **TF_CMD_OPTS)
@@ -56,9 +59,9 @@ class YleTf
         klass.new(config)
       end
 
-      def symlink_errored_tfstate
-        local_path = Pathname.pwd.join('errored.tfstate')
-        remote_path = config.module_dir.join('errored.tfstate')
+      def symlink_to_module_dir(file)
+        local_path = Pathname.pwd.join(file)
+        remote_path = config.module_dir.join(file)
 
         # Remove the possibly copied old file
         local_path.unlink if local_path.exist?

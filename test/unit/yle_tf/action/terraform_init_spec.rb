@@ -22,6 +22,7 @@ describe YleTf::Action::TerraformInit do
     let(:module_dir) { Pathname.new(module_dir_path) }
     let(:module_dir_path) { File.expand_path('../../fixtures/empty', __dir__) }
 
+    let(:terraform_lock) { Pathname.new('.terraform.lock.hcl') }
     let(:errored_tfstate) { Pathname.new('errored.tfstate') }
 
     before do
@@ -61,6 +62,24 @@ describe YleTf::Action::TerraformInit do
     it 'initializes Terraform' do
       expect(YleTf::System).to receive(:cmd).with('terraform', 'init', any_args)
       action.call(env)
+    end
+
+    it 'creates symlink to .terraform.lock.hcl' do
+      action.call(env)
+      expect(terraform_lock).to be_symlink
+      expect(terraform_lock.readlink).to eq(module_dir.join('.terraform.lock.hcl'))
+    end
+
+    context 'when old .terraform.lock.hcl exists' do
+      before do
+        FileUtils.touch(terraform_lock)
+      end
+
+      it 'replaces it with a symlink' do
+        action.call(env)
+        expect(terraform_lock).to be_symlink
+        expect(terraform_lock.readlink).to eq(module_dir.join('.terraform.lock.hcl'))
+      end
     end
 
     it 'creates symlink to errored.tfstate' do
