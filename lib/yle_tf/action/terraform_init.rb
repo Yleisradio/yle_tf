@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'pathname'
+require 'shellwords'
 
 require 'yle_tf/logger'
 require 'yle_tf/plugin'
@@ -28,27 +30,44 @@ class YleTf
         Logger.info('Initializing Terraform')
         Logger.debug("Backend configuration: #{backend}")
 
-        init(backend)
+        init_dir(backend)
 
-        @app.call(env)
+        if env[:tf_command] == 'init'
+          # Skip initializing Terraform here, as it will be done by the
+          # actuall command later in the middleware stack.
+          @app.call(env)
+          store_terraform_lock
+        else
+          init_terraform
+          store_terraform_lock
+          @app.call(env)
+        end
       end
 
-      def init(backend)
+      def init_dir(backend)
         Logger.debug('Configuring the backend')
         backend.configure
 
-        Logger.debug('Symlinking .terraform.lock.hcl')
-        symlink_to_module_dir('.terraform.lock.hcl')
-
         Logger.debug('Symlinking errored.tfstate')
         symlink_to_module_dir('errored.tfstate')
+      end
 
+      def init_terraform
         Logger.debug('Initializing Terraform')
-        YleTf::System.cmd('terraform', 'init', *TF_CMD_ARGS, **TF_CMD_OPTS)
+        YleTf::System.cmd('terraform', 'init', *tf_init_args, **TF_CMD_OPTS)
+      end
+
+      def store_terraform_lock
+        Logger.debug('Storing .terraform.lock.hcl')
+        copy_to_module_dir('.terraform.lock.hcl')
       end
 
       def backend
         @backend ||= find_backend
+      end
+
+      def tf_init_args
+        TF_CMD_ARGS + Shellwords.split(ENV.fetch('TF_INIT_ARGS', ''))
       end
 
       def find_backend
@@ -67,6 +86,10 @@ class YleTf
         local_path.unlink if local_path.exist?
 
         local_path.make_symlink(remote_path)
+      end
+
+      def copy_to_module_dir(file)
+        FileUtils.cp(file, config.module_dir.to_s) if File.exist?(file)
       end
     end
   end

@@ -32,6 +32,7 @@ describe YleTf::Action::TerraformInit do
 
       allow(YleTf::System).to receive(:cmd)
       allow(YleTf::Logger).to receive(:info)
+      allow(FileUtils).to receive(:cp)
 
       # Run in a tmpdir as a symlink will be created
       @orig_pwd = Dir.pwd
@@ -64,21 +65,19 @@ describe YleTf::Action::TerraformInit do
       action.call(env)
     end
 
-    it 'creates symlink to .terraform.lock.hcl' do
-      action.call(env)
-      expect(terraform_lock).to be_symlink
-      expect(terraform_lock.readlink).to eq(module_dir.join('.terraform.lock.hcl'))
-    end
-
-    context 'when old .terraform.lock.hcl exists' do
+    context 'when TF_INIT_ARGS is set' do
       before do
-        FileUtils.touch(terraform_lock)
+        ENV['TF_INIT_ARGS'] = '-force-copy -upgrade'
       end
 
-      it 'replaces it with a symlink' do
+      it 'passes them to Terraform' do
+        expect(YleTf::System).to receive(:cmd) do |*args|
+          expect(args.shift).to eq('terraform')
+          expect(args.shift).to eq('init')
+          expect(args).to include('-force-copy')
+          expect(args).to include('-upgrade')
+        end
         action.call(env)
-        expect(terraform_lock).to be_symlink
-        expect(terraform_lock.readlink).to eq(module_dir.join('.terraform.lock.hcl'))
       end
     end
 
@@ -97,6 +96,42 @@ describe YleTf::Action::TerraformInit do
         action.call(env)
         expect(errored_tfstate).to be_symlink
         expect(errored_tfstate.readlink).to eq(module_dir.join('errored.tfstate'))
+      end
+    end
+
+    context 'when .terraform.lock.hcl does not exist' do
+      it 'copies it back to module dir' do
+        expect(FileUtils).not_to receive(:cp)
+        action.call(env)
+      end
+    end
+
+    context 'when .terraform.lock.hcl exists' do
+      it 'copies it back to module dir' do
+        expect(YleTf::System).to receive(:cmd).with('terraform', 'init', any_args) do
+          FileUtils.touch(terraform_lock)
+        end
+        expect(FileUtils).to receive(:cp).with(terraform_lock.to_s, module_dir.to_s)
+        action.call(env)
+      end
+    end
+
+    context 'when tf_command is "init"' do
+      before do
+        env[:tf_command] = 'init'
+      end
+
+      it 'does not call `terraform init` directly' do
+        expect(YleTf::System).not_to receive(:cmd).with('terraform', 'init', any_args)
+        action.call(env)
+      end
+
+      it 'copies .terraform.lock.hcl back to module dir after calling next app' do
+        expect(app).to receive(:call).with(env).ordered do
+          FileUtils.touch(terraform_lock)
+        end
+        expect(FileUtils).to receive(:cp).with(terraform_lock.to_s, module_dir.to_s).ordered
+        action.call(env)
       end
     end
   end
