@@ -30,7 +30,7 @@ class YleTf
         Logger.info('Initializing Terraform')
         Logger.debug("Backend configuration: #{backend}")
 
-        init_dir(backend)
+        init_dir
 
         if env[:tf_command] == 'init'
           # Skip initializing Terraform here, as it will be done by the
@@ -42,14 +42,21 @@ class YleTf
           store_terraform_lock
           @app.call(env)
         end
+
+        tear_down
       end
 
-      def init_dir(backend)
+      def init_dir
         Logger.debug('Configuring the backend')
         backend.configure
 
         Logger.debug('Symlinking errored.tfstate')
         symlink_to_module_dir('errored.tfstate')
+      end
+
+      def tear_down
+        Logger.debug('Tearing down backend')
+        backend.tear_down
       end
 
       def init_terraform

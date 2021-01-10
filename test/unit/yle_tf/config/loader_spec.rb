@@ -17,19 +17,9 @@ describe YleTf::Config::Loader do
     let(:module_dir_path) { '/hopefully/non-existing/test-module' }
 
     context 'with default config' do
-      it do
-        is_expected.to eq(
-          'backend'   => {
-            'type' => 'file',
-            'file' => { 'path' => 'test-module_unit-tests.tfstate' },
-            's3'   => { 'key' => 'test-module_unit-tests.tfstate' }
-          },
-          'hooks'     => { 'pre' => [], 'post' => [] },
-          'tfvars'    => {},
-          'terraform' => { 'version_requirement' => nil },
-          'yle_tf'    => { 'version_requirement' => nil }
-        )
-      end
+      its(%w[backend type]) { is_expected.to eq('file') }
+      its(%w[backend file path]) { is_expected.to eq('test-module_unit-tests.tfstate') }
+      its(%w[backend s3 key]) { is_expected.to eq('test-module_unit-tests.tfstate') }
     end
 
     context 'with plugin and file configs' do
@@ -56,18 +46,11 @@ describe YleTf::Config::Loader do
         expect(loader).to receive(:plugins) { [test_plugin] }
         expect(loader).to receive(:config_files) { [config_file] }
 
-        is_expected.to eq(
-          'backend'   => {
-            'type' => 'foo',
-            'file' => { 'path' => 'test-module_unit-tests.tfstate' },
-            's3'   => { 'key' => 'test-module_unit-tests.tfstate' },
-            'foo'  => { 'bar' => 'from_file' }
-          },
-          'hooks'     => { 'pre' => [], 'post' => [] },
-          'tfvars'    => { 'xxx' => 'yyy' },
-          'terraform' => { 'version_requirement' => nil },
-          'yle_tf'    => { 'version_requirement' => nil }
-        )
+        expect(subject['backend']['type']).to eq('foo')
+        expect(subject['backend']['s3']['key']).to eq('test-module_unit-tests.tfstate')
+        expect(subject['backend']['foo']).to eq({ 'bar' => 'from_file' })
+        expect(subject['backend']['foo']).to eq({ 'bar' => 'from_file' })
+        expect(subject['tfvars']['xxx']).to eq('yyy')
       end
     end
   end

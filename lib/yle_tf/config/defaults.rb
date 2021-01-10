@@ -13,7 +13,10 @@ class YleTf
         'backend'   => {
           'type' => 'file',
           'file' => {
-            'path' => '<%= @module %>_<%= @env %>.tfstate'
+            'path'            => '<%= @module %>_<%= @env %>.tfstate',
+            'encrypt'         => false,
+            'encrypt_command' => 'sops --encrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"',
+            'decrypt_command' => 'sops --decrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"'
           },
           's3'   => {
             'key' => '<%= @module %>_<%= @env %>.tfstate'
