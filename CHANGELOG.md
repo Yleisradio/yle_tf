@@ -1,4 +1,4 @@
-## 1.4.0 / _Not released yet_
+## 1.4.0 / 2021-01-21
 
 This release includes mainly fixes and features for Terraform 0.14 compatibility:
 
