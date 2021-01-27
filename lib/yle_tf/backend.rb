@@ -30,6 +30,11 @@ class YleTf
       File.write(BACKEND_CONFIG_FILE, JSON.pretty_generate(data))
     end
 
+    # Tear down the backend
+    def tear_down
+      # Nothing to do by default
+    end
+
     # Returns the backend configuration as a `Hash` for Terraform
     def to_h
       { type => backend_specific_config }

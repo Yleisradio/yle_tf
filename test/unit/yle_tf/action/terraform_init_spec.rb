@@ -27,7 +27,8 @@ describe YleTf::Action::TerraformInit do
 
     before do
       allow(action).to receive(:backend) { backend }
-      allow(backend).to receive(:configure) { nil }
+      allow(backend).to receive(:configure)
+      allow(backend).to receive(:tear_down)
       allow(config).to receive(:module_dir) { module_dir }
 
       allow(YleTf::System).to receive(:cmd)
@@ -57,6 +58,11 @@ describe YleTf::Action::TerraformInit do
 
     it 'configures the backend' do
       expect(backend).to receive(:configure)
+      action.call(env)
+    end
+
+    it 'tears down the backend' do
+      expect(backend).to receive(:tear_down)
       action.call(env)
     end
 

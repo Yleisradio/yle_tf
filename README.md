@@ -104,7 +104,7 @@ variable "ami" {
 
 variable "instance_type" {
   description = "Instance type to use"
-  default = "t2.micro"
+  default     = "t2.micro"
 }
 ```
 
@@ -428,7 +428,7 @@ hooks:
 
 Configure where Terraform [remote state](https://www.terraform.io/docs/state/remote.html) is stored. See the Terraform documentation for [backends](https://www.terraform.io/docs/backends/) and especially [types](https://www.terraform.io/docs/backends/types/) for backend specific configuration options.
 
-_Note:_ the `local` backend type is not supported due to YleTf initialization process and use of temporary directory. Use the default `file` type instead, which makes a symlink to the state file in the working directory.
+_Note:_ the `local` backend type is not supported due to YleTf initialization process and use of temporary directory. Use the default `file` type instead, which makes a symlink to the state file (by default in the working directory).
 
 ```yaml
 type: <type>        # Backend type where the Terraform state is stored, e.g. `file` (local file), `s3`, `swift`.
@@ -458,6 +458,18 @@ backend:
     # Use the sanitized directory name right after the "src/" directory as part of the bucket name.
     bucket: 'terraform-state-<%= @module_dir.match(%r{.*/src/([^/]+)/})[1].downcase.tr("^a-z0-9", "-") %>-<%= @env %>'
     encrypt: true
+```
+
+Experimental encryption of the `file` backend (by default using [sops](https://github.com/mozilla/sops#readme), so maybe add `.sops.yaml` to configure it):
+
+```yaml
+backend:
+  type: file
+  file:
+    encrypt: true
+    ## The default commands:
+    #encrypt_command: sops --encrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"
+    #decrypt_command: sops --decrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"
 ```
 
 #### Terraform
