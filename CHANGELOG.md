@@ -1,11 +1,15 @@
 ## 1.4.0 / _Not released yet_
 
-This release includes mainly fixes and features for Terraform 0.14 compatibility.
+This release includes mainly fixes and features for Terraform 0.14 compatibility:
 
 - Store the Terraform 0.14+ version lock file by copying it after `terraform init`. Add more control for the initialization by supporting `tf <env> init` command, and by adding `TF_INIT_ARGS` env var. ([GH-36](https://github.com/Yleisradio/yle_tf/pull/36))
 - Write `terraformrc` only if it doesn't exist. This allows disabling the plugin cache (for [multi-arch lock file](https://github.com/hashicorp/terraform/issues/27388#issuecomment-756193826)), even if it slows down YleTf by causing provider downloads on each run. ([GH-39](https://github.com/Yleisradio/yle_tf/pull/39))
 - Fix `--help` with Terraform 0.14 by not even trying to list all Terraform commands. You can get them with `terraform -help`.  ([GH-38](https://github.com/Yleisradio/yle_tf/pull/38))
 - Add Terraform 0.14 and Ruby 3.0 to tested versions, drop testing for older Terraform versions than 0.11 (should still work with 0.9+) ([GH-35](https://github.com/Yleisradio/yle_tf/pull/35))
+
+New features:
+
+- Add experimental support for encrypting file backend states. See the PR for more details: ([GH-40](https://github.com/Yleisradio/yle_tf/pull/40))
 
 ## 1.3.0 / 2020-10-12
 
