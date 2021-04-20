@@ -30,6 +30,7 @@ class YleTf
 
     def self.log_level
       (ENV['TF_DEBUG'] && 'DEBUG') || \
+        (ENV['TF_LOG'] == 'TRACE' && 'DEBUG') || \
         ENV['TF_LOG'] || \
         'INFO'
     end
