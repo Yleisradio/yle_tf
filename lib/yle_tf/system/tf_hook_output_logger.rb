@@ -13,7 +13,7 @@ class YleTf
       def log(progname, line)
         # Remove `[<progname>] ` prefix from the output line.
         # This is mostly for backwards compatibility in Yle.
-        line.sub!(/^\[#{progname}\] /, '')
+        line = line.encode('utf-8').sub(/^\[#{progname}\] /, '')
 
         level, line = line_level(line)
 
