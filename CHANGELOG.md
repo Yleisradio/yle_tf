@@ -4,10 +4,10 @@ Compatibility:
 
 - Handle TF_LOG=TRACE in similar fashion as DEBUG ([GH-41](https://github.com/Yleisradio/yle_tf/pull/41/))
 - Add Terrafrom 1.0 to tested versions. ([GH-43](https://github.com/Yleisradio/yle_tf/pull/43))
-
+-
 Bugfixes:
 
-- Encode terraform hooks output into UTF-8. Previously it crashed in String.sub method. ([GH-42](https://github.com/Yleisradio/yle_tf/pull/42))
+- Interpret terraform hooks output as UTF-8. ([GH-42](https://github.com/Yleisradio/yle_tf/pull/42) & [GH-44](https://github.com/Yleisradio/yle_tf/pull/44))
 
 ## 1.4.0 / 2021-01-21
 
