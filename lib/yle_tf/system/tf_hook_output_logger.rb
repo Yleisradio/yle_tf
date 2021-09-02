@@ -13,9 +13,12 @@ class YleTf
       def log(progname, line)
         # Remove `[<progname>] ` prefix from the output line.
         # This is mostly for backwards compatibility in Yle.
-        line = line.encode('utf-8').sub(/^\[#{progname}\] /, '')
-
-        level, line = line_level(line)
+        begin
+          newline = line.encode('utf-8').sub(/^\[#{progname}\] /, '')
+        rescue Encoding::InvalidByteSequenceError
+          newline = line
+        end
+        level, line = line_level(newline)
 
         YleTf::Logger.public_send(level, progname) { line }
       end
