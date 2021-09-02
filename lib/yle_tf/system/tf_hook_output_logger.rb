@@ -15,7 +15,7 @@ class YleTf
         # This is mostly for backwards compatibility in Yle.
         level = "INFO".downcase.to_sym
         begin
-          newline = line.encode(Encoding::UTF_8).sub(/^\[#{progname}\] /, '')
+          newline = line.force_encoding(Encoding::UTF_8).sub(/^\[#{progname}\] /, '')
           level, line = line_level(newline)
         rescue ArgumentError, Encoding::InvalidByteSequenceError => e
           YleTf::Logger.warn "Caught exception #{e} with #{line}"
