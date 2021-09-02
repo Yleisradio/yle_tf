@@ -17,7 +17,7 @@ class YleTf
         begin
           newline = line.force_encoding(Encoding::UTF_8).sub(/^\[#{progname}\] /, '')
           level, line = line_level(newline)
-        rescue ArgumentError, Encoding::InvalidByteSequenceError => e
+        rescue ArgumentError => e
           YleTf::Logger.warn "Caught exception #{e} with #{line}"
         end
 
