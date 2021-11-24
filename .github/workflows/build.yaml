@@ -1,0 +1,30 @@
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    env:
+      TERRAFORM_VERSIONS: "1.0.5 0.14.5 0.13.6 0.12.30 0.11.14"
+    strategy:
+      matrix:
+        ruby: [ '2.4', '2.5', '2.6', '2.7', '3.0' ]
+    name: build on ruby ${{ matrix.ruby }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: pull terraform images
+        run: |
+          for v in $TERRAFORM_VERSIONS; do docker pull hashicorp/terraform:$v; done
+      - name: bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: run tests
+          bundle exec rake "test[$TERRAFORM_VERSIONS]"
+
