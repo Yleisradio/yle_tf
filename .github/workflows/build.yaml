@@ -1,3 +1,6 @@
+name: build
+on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-20.04
