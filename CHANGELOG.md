@@ -4,7 +4,9 @@ Compatibility:
 
 - Handle TF_LOG=TRACE in similar fashion as DEBUG ([GH-41](https://github.com/Yleisradio/yle_tf/pull/41/))
 - Add Terrafrom 1.0 to tested versions. ([GH-43](https://github.com/Yleisradio/yle_tf/pull/43))
--
+- Changed CI environment from Travis-CI to GitHub Actions ([GH-44](https://github.com/Yleisradio/yle_tf/pull/45))
+- Dropped support for Ruby versions 2.4 and 2.5 and Terraform versions 0.9 and 0.10. ([GH-45](https://github.com/Yleisradio/yle_tf/pull/46))
+
 Bugfixes:
 
 - Interpret terraform hooks output as UTF-8. ([GH-42](https://github.com/Yleisradio/yle_tf/pull/42) & [GH-44](https://github.com/Yleisradio/yle_tf/pull/44))
