@@ -15,8 +15,7 @@ namespace :test do
        "Terraform versions can be passed by a comma/space separated argument or \n" \
        'TERRAFORM_VERSIONS environment variable.'
   task :acceptance, [:terraform_versions] do |t, args|
-    # Find all acceptance test tasks
-    tasks = namespace(t.name) {}.tasks
+    tasks = namespace(t.name) {}.tasks # Find all acceptance test tasks
 
     TestSupport::Rake.terraform_versions(args, default: 'latest').each do |v|
       rake_output_message "#########################################################\n" \

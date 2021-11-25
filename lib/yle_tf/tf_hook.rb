@@ -55,7 +55,7 @@ class YleTf
     end
 
     def parse_source_config
-      m = %r{^(?<uri>.+)//(?<path>[^?]+)(\?ref=(?<ref>.*))?$}.match(source)
+      m = %r{^(?<uri>.+)//(?<path>[^?]+)(?<query_string>\?ref=(?<ref>.*))?$}.match(source)
       raise Error, "Invalid or missing `source` for hook '#{description}'" if !m
 
       {

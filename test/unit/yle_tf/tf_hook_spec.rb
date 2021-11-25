@@ -18,7 +18,7 @@ describe YleTf::TfHook do
     end
     let(:description) { 'Hook description' }
     let(:source) { 'git@git.example.com:organization/repo.git//hook/path' }
-    let(:vars) {}
+    let(:vars) {} # defined for readability
     let(:env) { 'spec' }
 
     describe '#description' do

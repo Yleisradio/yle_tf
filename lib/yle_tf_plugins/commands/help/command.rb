@@ -39,7 +39,7 @@ module YleTfPlugins
       end
 
       def device(env)
-        error?(env) ? STDERR : STDOUT
+        error?(env) ? $stderr : $stdout
       end
 
       def tf_command_help

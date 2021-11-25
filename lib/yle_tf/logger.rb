@@ -10,7 +10,9 @@ class YleTf
   # Prints to STDERR, so it does not mess with e.g. `terraform output`.
   module Logger
     LEVELS = %i[debug info warn error fatal].freeze
+    # rubocop:disable Style/GlobalStdStream
     DEVICE = STDERR
+    # rubocop:enable Style/GlobalStdStream
 
     # Default to colorful error messages on a TTY
     @color = DEVICE.respond_to?(:tty?) && DEVICE.tty?

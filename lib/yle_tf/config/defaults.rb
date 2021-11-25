@@ -5,6 +5,7 @@ require 'yle_tf/helpers/hash'
 class YleTf
   class Config
     module Defaults
+      sops_options = '--input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"'
       DEFAULT_CONFIG = {
         'hooks'     => {
           'pre'  => [],
@@ -15,8 +16,8 @@ class YleTf
           'file' => {
             'path'            => '<%= @module %>_<%= @env %>.tfstate',
             'encrypt'         => false,
-            'encrypt_command' => 'sops --encrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"',
-            'decrypt_command' => 'sops --decrypt --input-type binary --output-type binary --output "{{TO}}" "{{FROM}}"'
+            'encrypt_command' => "sops --encrypt #{sops_options}",
+            'decrypt_command' => "sops --decrypt #{sops_options}"
           },
           's3'   => {
             'key' => '<%= @module %>_<%= @env %>.tfstate'

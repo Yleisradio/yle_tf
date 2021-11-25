@@ -10,9 +10,11 @@ class YleTf
           vars.each { |key, value| instance_variable_set(:"@#{key}", value) }
         end
 
+        # rubocop:disable Lint/UselessMethodDefinition
         def binding
           super
         end
+        # rubocop:enable Lint/UselessMethodDefinition
       end
 
       def self.evaluate(string, vars = {})
