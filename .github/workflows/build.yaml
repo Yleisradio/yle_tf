@@ -1,0 +1,25 @@
+name: Test
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    env:
+      TERRAFORM_VERSIONS: "1.0.5 0.14.5 0.13.6 0.12.30 0.11.14"
+    strategy:
+      fail-fast: true
+      matrix:
+        ruby: [ '2.4', '2.5', '2.6', '2.7', '3.0' ]
+    name: Test on Ruby ${{ matrix.ruby }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Pull Terraform images
+        run: |
+          for v in $TERRAFORM_VERSIONS; do docker pull hashicorp/terraform:$v; done
+      - name: Run tests
+        run: bundle exec rake "test[$TERRAFORM_VERSIONS]"
+
