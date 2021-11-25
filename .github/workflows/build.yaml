@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        ruby: [ '2.4', '2.5', '2.6', '2.7', '3.0' ]
+        ruby: [ '2.6', '2.7', '3.0' ]
     name: Test on Ruby ${{ matrix.ruby }}
     steps:
       - uses: actions/checkout@v2
