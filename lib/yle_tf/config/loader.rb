@@ -59,7 +59,7 @@ class YleTf
       def eval_config(config)
         case config
         when Hash
-          config.each_with_object({}) { |(key, value), h| h[key] = eval_config(value) }
+          config.transform_values { |value| eval_config(value) }
         when Array
           config.map { |item| eval_config(item) }
         when String

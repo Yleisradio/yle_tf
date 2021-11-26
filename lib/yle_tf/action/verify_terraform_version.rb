@@ -28,7 +28,7 @@ class YleTf
       end
 
       def terraform_version
-        v = YleTf::System.read_cmd('terraform', 'version', error_handler: proc {})
+        v = YleTf::System.read_cmd('terraform', 'version', error_handler: proc {}) # ignore errors
         m = /^Terraform v(?<version>[^\s]+)/.match(v)
         m && m[:version]
       end

@@ -15,11 +15,9 @@ class YleTf
 
       def call(io, progname)
         Thread.new do
-          begin
-            io.each { |line| log(progname, line.chomp) }
-          rescue IOError => e
-            YleTf::Logger.debug e.full_message
-          end
+          io.each { |line| log(progname, line.chomp) }
+        rescue IOError => e
+          YleTf::Logger.debug e.full_message
         end
       end
 

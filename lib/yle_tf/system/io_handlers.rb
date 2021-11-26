@@ -9,7 +9,7 @@ class YleTf
     class IOHandlers
       BLOCK_SIZE = 1024
 
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+      # rubocop:disable Metrics/MethodLength
       def self.input_handler(handler)
         case handler
         when :close
@@ -49,13 +49,14 @@ class YleTf
           handler
         end
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
+      # rubocop:enable Metrics/MethodLength
 
       # Returns a lambda that just closes the IO
       def self.close
         ->(io, *) { io.close }
       end
 
+      # rubocop:disable Style/GlobalStdStream
       # Returns a lambda that pipes STDIN to the IO
       def self.console_input
         io_input(STDIN)
@@ -65,6 +66,7 @@ class YleTf
       def self.console_output
         io_output(STDOUT)
       end
+      # rubocop:enable Style/GlobalStdStream
 
       # Returns a lambda that does nothing
       def self.dev_null_input
@@ -75,11 +77,9 @@ class YleTf
       def self.dev_null_output
         lambda do |io, *|
           Thread.new do
-            begin
-              while io.read; end
-            rescue IOError => e
-              YleTf::Logger.debug e.full_message
-            end
+            while io.read; end
+          rescue IOError => e
+            YleTf::Logger.debug e.full_message
           end
         end
       end
@@ -108,7 +108,7 @@ class YleTf
         while (data = source.readpartial(BLOCK_SIZE))
           target.write(data)
         end
-      rescue EOFError # rubocop:disable Lint/SuppressedException
+      rescue EOFError
         # All read
       rescue IOError => e
         YleTf::Logger.debug e.full_message
